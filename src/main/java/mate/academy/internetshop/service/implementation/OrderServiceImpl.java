@@ -1,6 +1,5 @@
 package mate.academy.internetshop.service.implementation;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,9 +48,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order completeOrder(List items, User user) {
-        return Optional.ofNullable(orderDao.create(new Order(LocalDate.now(),
-                bucketDao.create(new Bucket(items, user)),
-                user.getAddress()))).orElseThrow();
+        return Optional.ofNullable(orderDao.create(
+                new Order(bucketDao.create(
+                        new Bucket(items, user)), user.getAddress())))
+                .orElseThrow();
     }
 
     @Override

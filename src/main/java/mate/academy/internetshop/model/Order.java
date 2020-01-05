@@ -11,9 +11,9 @@ public class Order {
     private Bucket bucket;
     private String deliveryAddress;
 
-    public Order(LocalDate date, Bucket bucket, String deliveryAddress) {
+    public Order(Bucket bucket, String deliveryAddress) {
         this.orderId = ++id;
-        this.date = date;
+        this.date = LocalDate.now();
         this.bucket = bucket;
         this.deliveryAddress = deliveryAddress;
     }
@@ -64,5 +64,15 @@ public class Order {
     @Override
     public int hashCode() {
         return Objects.hash(orderId, date, bucket, deliveryAddress);
+    }
+
+    @Override
+    public String toString() {
+        return "Order{"
+                + "orderId=" + orderId
+                + ", date=" + date
+                + ", bucket=" + bucket
+                + ", deliveryAddress='" + deliveryAddress + '\''
+                + '}';
     }
 }

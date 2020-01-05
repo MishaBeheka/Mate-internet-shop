@@ -53,5 +53,14 @@ public class Bucket {
     public int hashCode() {
         return Objects.hash(bucketId, items, user);
     }
+
+    @Override
+    public String toString() {
+        return "Bucket{"
+                + "bucketId=" + bucketId
+                + ", items=" + items
+                + ", user=" + user
+                + '}';
+    }
 }
 

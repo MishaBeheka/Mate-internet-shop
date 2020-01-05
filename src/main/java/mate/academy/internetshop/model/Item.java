@@ -52,4 +52,13 @@ public class Item {
     public int hashCode() {
         return Objects.hash(itemId, name, price);
     }
+
+    @Override
+    public String toString() {
+        return "Item{"
+                + "itemId=" + itemId
+                + ", name='" + name + '\''
+                + ", price=" + price
+                + '}';
+    }
 }
