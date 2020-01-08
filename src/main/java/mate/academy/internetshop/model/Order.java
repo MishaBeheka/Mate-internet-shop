@@ -5,14 +5,14 @@ import java.util.Objects;
 
 public class Order {
 
-    private static Long id = 0L;
+    private static Long idGenerator = 0L;
     private Long orderId;
     private LocalDate date;
     private Bucket bucket;
     private String deliveryAddress;
 
     public Order(Bucket bucket, String deliveryAddress) {
-        this.orderId = ++id;
+        this.orderId = ++idGenerator;
         this.date = LocalDate.now();
         this.bucket = bucket;
         this.deliveryAddress = deliveryAddress;

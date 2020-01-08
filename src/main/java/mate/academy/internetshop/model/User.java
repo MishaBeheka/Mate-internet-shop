@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class User {
 
-    private static Long id = 0L;
+    private static Long idGenerator= 0L;
 
     private Long userId;
     private String firstName;
@@ -17,7 +17,7 @@ public class User {
     public User(String firstName, String lastName, String address,
                 String phone, String login, String password) {
 
-        this.userId = ++id;
+        this.userId = ++idGenerator;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;

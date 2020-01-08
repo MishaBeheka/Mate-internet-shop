@@ -3,13 +3,13 @@ package mate.academy.internetshop.model;
 import java.util.Objects;
 
 public class Item {
-    private static Long id = 0L;
+    private static Long idGenerator = 0L;
     private Long itemId;
     private String name;
     private Double price;
 
     public Item(String name, Double price) {
-        this.itemId = ++id;
+        this.itemId = ++idGenerator;
         this.name = name;
         this.price = price;
     }
