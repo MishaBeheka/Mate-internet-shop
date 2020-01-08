@@ -23,12 +23,12 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User get(Long id) {
-        return Storage.users
+    public Optional get(Long id) {
+        return Optional.ofNullable(Storage.users
                 .stream()
                 .filter(u -> u.getUserId().equals(id))
                 .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("Can't find user with id " + id));
+                .orElseThrow(() -> new NoSuchElementException("Can't find user with id " + id)));
     }
 
     @Override

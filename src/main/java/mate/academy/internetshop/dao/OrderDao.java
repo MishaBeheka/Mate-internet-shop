@@ -2,11 +2,13 @@ package mate.academy.internetshop.dao;
 
 import mate.academy.internetshop.model.Order;
 
+import java.util.Optional;
+
 public interface OrderDao {
 
     Order create(Order order);
 
-    Order get(Long id);
+    Optional get(Long id);
 
     Order update(Order order);
 
