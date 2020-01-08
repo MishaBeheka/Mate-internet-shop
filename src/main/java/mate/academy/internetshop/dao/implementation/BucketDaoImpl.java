@@ -39,7 +39,7 @@ public class BucketDaoImpl implements BucketDao {
                 .filter(bucket1 -> bucket1.getBucketId().equals(bucket.getBucketId()))
                 .findFirst()
                 .map(updateBucket -> {
-                    updateBucket.setUser(bucket.getUser());
+                    updateBucket.setUserId(bucket.getUserId());
                     updateBucket.setItems(bucket.getItems());
                     return updateBucket;
                 })

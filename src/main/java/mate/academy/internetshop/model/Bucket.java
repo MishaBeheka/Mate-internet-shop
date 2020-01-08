@@ -7,12 +7,12 @@ public class Bucket {
     private static Long idGenerator = 0L;
     private Long bucketId;
     private List<Item> items;
-    private User user;
+    private Long userId;
 
-    public Bucket(List<Item> items, User user) {
+    public Bucket(List<Item> items, Long userId) {
         this.bucketId = ++idGenerator;
         this.items = items;
-        this.user = user;
+        this.userId = userId;
     }
 
     public Long getBucketId() {
@@ -27,12 +27,12 @@ public class Bucket {
         this.items = items;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -46,12 +46,12 @@ public class Bucket {
         Bucket bucket = (Bucket) o;
         return Objects.equals(bucketId, bucket.bucketId)
                 && Objects.equals(items, bucket.items)
-                && Objects.equals(user, bucket.user);
+                && Objects.equals(userId, bucket.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bucketId, items, user);
+        return Objects.hash(bucketId, items, userId);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class Bucket {
         return "Bucket{"
                 + "bucketId=" + bucketId
                 + ", items=" + items
-                + ", user=" + user
+                + ", userId=" + userId
                 + '}';
     }
 }

@@ -4,12 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.dao.OrderDao;
 import mate.academy.internetshop.db.Storage;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.lib.Service;
-import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Order;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.OrderService;
@@ -18,8 +16,6 @@ import mate.academy.internetshop.service.OrderService;
 public class OrderServiceImpl implements OrderService {
     @Inject
     private static OrderDao orderDao;
-    @Inject
-    private static BucketDao bucketDao;
 
     @Override
     public Order create(Order order) {
@@ -27,7 +23,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order get(Long id) {
+    public Optional get(Long id) {
         return orderDao.get(id);
     }
 
@@ -48,17 +44,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order completeOrder(List items, User user) {
-        return Optional.ofNullable(orderDao.create(
-                new Order(bucketDao.create(
-                        new Bucket(items, user)), user.getAddress())))
-                .orElseThrow();
+        return orderDao.create(new Order(user.getUserId(),items));
     }
 
     @Override
     public List getUserOrders(User user) {
         return Storage.orders
                 .stream()
-                .filter(order -> order.getBucket().getUser().equals(user))
+                .filter(order -> order.getUserId().equals(user.getUserId()))
                 .collect(Collectors.toList());
     }
 }

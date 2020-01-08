@@ -1,6 +1,7 @@
 package mate.academy.internetshop.model;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class Order {
@@ -8,14 +9,14 @@ public class Order {
     private static Long idGenerator = 0L;
     private Long orderId;
     private LocalDate date;
-    private Bucket bucket;
-    private String deliveryAddress;
+    private Long userId;
+    private List<Item> items;
 
-    public Order(Bucket bucket, String deliveryAddress) {
+    public Order(Long userId, List<Item> items) {
         this.orderId = ++idGenerator;
         this.date = LocalDate.now();
-        this.bucket = bucket;
-        this.deliveryAddress = deliveryAddress;
+        this.userId = userId;
+        this.items = items;
     }
 
     public Long getOrderId() {
@@ -30,20 +31,20 @@ public class Order {
         this.date = date;
     }
 
-    public String getDeliveryAddress() {
-        return deliveryAddress;
+    public List<Item> getItems() {
+        return items;
     }
 
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
-    public Bucket getBucket() {
-        return bucket;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setBucket(Bucket bucket) {
-        this.bucket = bucket;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -57,13 +58,13 @@ public class Order {
         Order order = (Order) o;
         return Objects.equals(orderId, order.orderId)
                 && Objects.equals(date, order.date)
-                && Objects.equals(bucket, order.bucket)
-                && Objects.equals(deliveryAddress, order.deliveryAddress);
+                && Objects.equals(userId, order.userId)
+                && Objects.equals(items, order.items);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId, date, bucket, deliveryAddress);
+        return Objects.hash(orderId, date, userId, items);
     }
 
     @Override
@@ -71,8 +72,8 @@ public class Order {
         return "Order{"
                 + "orderId=" + orderId
                 + ", date=" + date
-                + ", bucket=" + bucket
-                + ", deliveryAddress='" + deliveryAddress + '\''
+                + ", userId=" + userId
+                + ", items='" + items + '\''
                 + '}';
     }
 }

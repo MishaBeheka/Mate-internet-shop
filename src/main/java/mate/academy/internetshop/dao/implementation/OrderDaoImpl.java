@@ -39,8 +39,8 @@ public class OrderDaoImpl implements OrderDao {
                 .findFirst()
                 .map(updateOrder -> {
                     updateOrder.setDate(order.getDate());
-                    updateOrder.setBucket(order.getBucket());
-                    updateOrder.setDeliveryAddress(order.getDeliveryAddress());
+                    updateOrder.setUserId(order.getUserId());
+                    updateOrder.setItems(order.getItems());
                     return updateOrder;
                 })
                 .orElseThrow(() -> new RuntimeException("Order isn't update " + order));
