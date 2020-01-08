@@ -13,13 +13,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User create(User user) {
         Storage.users.add(user);
-        Optional<User> createdUser = Storage.users
-                .stream()
-                .filter(u -> u.equals(user))
-                .findFirst();
-        return createdUser
-                .orElseThrow(() ->
-                        new RuntimeException("User didn't create " + user));
+        return user;
     }
 
     @Override

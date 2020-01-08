@@ -14,12 +14,7 @@ public class BucketDaoImpl implements BucketDao {
     @Override
     public Bucket create(Bucket bucket) {
         Storage.buckets.add(bucket);
-        return Storage.buckets
-                .stream()
-                .filter(createdBucket -> createdBucket.equals(bucket))
-                .findFirst()
-                .orElseThrow(() ->
-                        new RuntimeException("Bucket isn't created " + bucket));
+        return bucket;
     }
 
     @Override

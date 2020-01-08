@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class User {
 
-    private static Long idGenerator= 0L;
+    private static Long idGenerator = 0L;
 
     private Long userId;
     private String firstName;

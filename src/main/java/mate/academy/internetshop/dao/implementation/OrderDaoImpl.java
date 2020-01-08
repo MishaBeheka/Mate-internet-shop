@@ -13,12 +13,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order create(Order order) {
         Storage.orders.add(order);
-        return Storage.orders
-                .stream()
-                .filter(order1 -> order1.equals(order))
-                .findFirst()
-                .orElseThrow(() ->
-                        new RuntimeException("Order isn't created " + order));
+        return order;
     }
 
     @Override

@@ -13,12 +13,7 @@ public class ItemDaoImpl implements ItemDao {
     @Override
     public Item create(Item item) {
         Storage.items.add(item);
-        return Storage.items
-                .stream()
-                .filter(item1 -> item1.equals(item))
-                .findFirst()
-                .orElseThrow(() ->
-                        new RuntimeException("Item is't created " + item));
+        return item;
     }
 
     @Override
