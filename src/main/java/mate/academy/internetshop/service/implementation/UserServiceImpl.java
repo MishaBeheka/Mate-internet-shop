@@ -1,7 +1,9 @@
 package mate.academy.internetshop.service.implementation;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.NoSuchElementException;
 import mate.academy.internetshop.dao.UserDao;
+import mate.academy.internetshop.db.Storage;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.lib.Service;
 import mate.academy.internetshop.model.User;
@@ -18,8 +20,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional get(Long id) {
-        return userDao.get(id);
+    public User get(Long id) {
+        return userDao.get(id).orElseThrow(NoSuchElementException::new);
     }
 
     @Override
@@ -28,12 +30,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean delete(Long id) {
-        return userDao.delete(id);
+    public boolean deleteById(Long id) {
+        return userDao.deleteById(id);
     }
 
     @Override
-    public boolean delete(User user) {
-        return userDao.delete(user);
+    public boolean deleteByEntity(User user) {
+        return userDao.deleteByEntity(user);
+    }
+
+    @Override
+    public List<User> getAll() {
+        return Storage.users;
     }
 }

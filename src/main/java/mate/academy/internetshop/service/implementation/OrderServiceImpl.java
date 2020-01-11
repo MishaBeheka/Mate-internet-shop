@@ -1,7 +1,7 @@
 package mate.academy.internetshop.service.implementation;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import mate.academy.internetshop.dao.OrderDao;
@@ -23,8 +23,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional get(Long id) {
-        return orderDao.get(id);
+    public Order get(Long id) {
+        return orderDao.get(id).orElseThrow(NoSuchElementException::new);
     }
 
     @Override
@@ -33,13 +33,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean delete(Long id) {
-        return orderDao.delete(id);
+    public boolean deleteById(Long id) {
+        return orderDao.deleteById(id);
     }
 
     @Override
-    public boolean delete(Order order) {
-        return orderDao.delete(order);
+    public boolean deleteByEntity(Order order) {
+        return orderDao.deleteByEntity(order);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List getUserOrders(User user) {
+    public List<Order> getUserOrders(User user) {
         return Storage.orders
                 .stream()
                 .filter(order -> order.getUserId().equals(user.getUserId()))

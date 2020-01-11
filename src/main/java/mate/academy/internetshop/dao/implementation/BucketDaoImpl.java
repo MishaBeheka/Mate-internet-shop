@@ -18,7 +18,7 @@ public class BucketDaoImpl implements BucketDao {
     }
 
     @Override
-    public Optional get(Long bucketId) {
+    public Optional<Bucket> get(Long bucketId) {
         return Optional.ofNullable(Storage.buckets
                 .stream()
                 .filter(bucket -> bucket.getBucketId().equals(bucketId))
@@ -42,13 +42,13 @@ public class BucketDaoImpl implements BucketDao {
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean deleteById(Long id) {
         return Storage.buckets
                 .removeIf(deletedBucket -> deletedBucket.getBucketId().equals(id));
     }
 
     @Override
-    public boolean delete(Bucket bucket) {
+    public boolean deleteByEntity(Bucket bucket) {
         return Storage.buckets
                 .removeIf(deletedBucket -> deletedBucket.equals(bucket));
     }

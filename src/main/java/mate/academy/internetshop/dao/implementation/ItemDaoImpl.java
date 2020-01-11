@@ -17,7 +17,7 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public Optional get(Long id) {
+    public Optional<Item> get(Long id) {
         return Optional.ofNullable(Storage.items
                 .stream()
                 .filter(i -> i.getItemId().equals(id))
@@ -40,12 +40,12 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean deleteById(Long id) {
         return Storage.items.removeIf(removedItem -> removedItem.getItemId().equals(id));
     }
 
     @Override
-    public boolean delete(Item item) {
+    public boolean deleteByEntity(Item item) {
         return Storage.items.removeIf(removedItem -> removedItem.equals(item));
     }
 }
