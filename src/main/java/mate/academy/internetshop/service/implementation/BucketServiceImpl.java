@@ -1,5 +1,6 @@
 package mate.academy.internetshop.service.implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -27,6 +28,11 @@ public class BucketServiceImpl implements BucketService {
     @Override
     public Bucket get(Long id) {
         return bucketDao.get(id).orElseThrow(NoSuchElementException::new);
+    }
+
+    @Override
+    public Bucket getByUserId(Long userId) {
+        return bucketDao.getByUserId(userId).orElse(create(new Bucket(new ArrayList<>(), userId)));
     }
 
     @Override
