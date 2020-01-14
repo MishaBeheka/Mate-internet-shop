@@ -1,13 +1,13 @@
 package mate.academy.internetshop.service.implementation;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import mate.academy.internetshop.dao.OrderDao;
-import mate.academy.internetshop.db.Storage;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.lib.Service;
+import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.model.Order;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.OrderService;
@@ -23,8 +23,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional get(Long id) {
-        return orderDao.get(id);
+    public Order get(Long id) {
+        return orderDao.get(id).orElseThrow(NoSuchElementException::new);
     }
 
     @Override
@@ -33,23 +33,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean delete(Long id) {
-        return orderDao.delete(id);
+    public boolean deleteById(Long id) {
+        return orderDao.deleteById(id);
     }
 
     @Override
-    public boolean delete(Order order) {
-        return orderDao.delete(order);
+    public boolean deleteByEntity(Order order) {
+        return orderDao.deleteByEntity(order);
     }
 
     @Override
-    public Order completeOrder(List items, User user) {
-        return orderDao.create(new Order(user.getUserId(),items));
+    public Order completeOrder(List<Item> items, User user) {
+        return orderDao.create(new Order(user.getUserId(), items));
     }
 
     @Override
-    public List getUserOrders(User user) {
-        return Storage.orders
+    public List<Order> getUserOrders(User user) {
+        return orderDao.getAll()
                 .stream()
                 .filter(order -> order.getUserId().equals(user.getUserId()))
                 .collect(Collectors.toList());
