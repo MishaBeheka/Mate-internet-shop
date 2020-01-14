@@ -1,5 +1,6 @@
 package mate.academy.internetshop.dao.implementation;
 
+import java.util.List;
 import java.util.Optional;
 
 import mate.academy.internetshop.dao.ItemDao;
@@ -46,5 +47,10 @@ public class ItemDaoImpl implements ItemDao {
     @Override
     public boolean deleteByEntity(Item item) {
         return Storage.items.removeIf(removedItem -> removedItem.equals(item));
+    }
+
+    @Override
+    public List<Item> getAllItems() {
+        return Storage.items;
     }
 }
