@@ -1,5 +1,6 @@
 package mate.academy.internetshop.dao.implementation;
 
+import java.util.List;
 import java.util.Optional;
 
 import mate.academy.internetshop.dao.BucketDao;
@@ -55,5 +56,10 @@ public class BucketDaoImpl implements BucketDao {
     public boolean deleteByEntity(Bucket bucket) {
         return Storage.buckets
                 .removeIf(deletedBucket -> deletedBucket.equals(bucket));
+    }
+
+    @Override
+    public List<Bucket> getAll() {
+        return Storage.buckets;
     }
 }

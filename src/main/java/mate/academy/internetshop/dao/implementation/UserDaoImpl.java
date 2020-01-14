@@ -1,5 +1,6 @@
 package mate.academy.internetshop.dao.implementation;
 
+import java.util.List;
 import java.util.Optional;
 
 import mate.academy.internetshop.dao.UserDao;
@@ -52,5 +53,10 @@ public class UserDaoImpl implements UserDao {
     public boolean deleteByEntity(User user) {
         return Storage.users
                 .removeIf(user1 -> user1.equals(user));
+    }
+
+    @Override
+    public List<User> getAll() {
+        return Storage.users;
     }
 }

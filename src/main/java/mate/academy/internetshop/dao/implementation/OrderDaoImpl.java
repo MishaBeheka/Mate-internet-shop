@@ -1,5 +1,6 @@
 package mate.academy.internetshop.dao.implementation;
 
+import java.util.List;
 import java.util.Optional;
 
 import mate.academy.internetshop.dao.OrderDao;
@@ -47,5 +48,10 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public boolean deleteByEntity(Order order) {
         return Storage.orders.removeIf(order1 -> order1.equals(order));
+    }
+
+    @Override
+    public List<Order> getAll() {
+        return Storage.orders;
     }
 }

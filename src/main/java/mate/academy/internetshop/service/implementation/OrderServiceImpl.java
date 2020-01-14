@@ -5,7 +5,6 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import mate.academy.internetshop.dao.OrderDao;
-import mate.academy.internetshop.db.Storage;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.lib.Service;
 import mate.academy.internetshop.model.Item;
@@ -45,12 +44,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order completeOrder(List<Item> items, User user) {
-        return orderDao.create(new Order(user.getUserId(),items));
+        return orderDao.create(new Order(user.getUserId(), items));
     }
 
     @Override
     public List<Order> getUserOrders(User user) {
-        return Storage.orders
+        return orderDao.getAll()
                 .stream()
                 .filter(order -> order.getUserId().equals(user.getUserId()))
                 .collect(Collectors.toList());

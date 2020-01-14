@@ -50,7 +50,7 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public List<Item> getAllItems() {
+    public List<Item> getAll() {
         return Storage.items;
     }
 }

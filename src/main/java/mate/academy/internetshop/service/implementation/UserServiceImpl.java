@@ -2,8 +2,8 @@ package mate.academy.internetshop.service.implementation;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+
 import mate.academy.internetshop.dao.UserDao;
-import mate.academy.internetshop.db.Storage;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.lib.Service;
 import mate.academy.internetshop.model.User;
@@ -41,6 +41,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAll() {
-        return Storage.users;
+        return userDao.getAll();
     }
 }

@@ -1,12 +1,11 @@
 package mate.academy.internetshop.service.implementation;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+
 import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.dao.ItemDao;
-import mate.academy.internetshop.db.Storage;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.lib.Service;
 import mate.academy.internetshop.model.Bucket;
@@ -32,7 +31,7 @@ public class BucketServiceImpl implements BucketService {
 
     @Override
     public Bucket getByUserId(Long userId) {
-        return bucketDao.getByUserId(userId).orElse(create(new Bucket(new ArrayList<>(), userId)));
+        return bucketDao.getByUserId(userId).orElseThrow(NoSuchElementException::new);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class BucketServiceImpl implements BucketService {
 
     @Override
     public void addItem(Bucket bucket, Item item) {
-        Storage.buckets
+        bucketDao.getAll()
                 .stream()
                 .filter(elementOfBucket -> elementOfBucket.equals(bucket))
                 .findFirst()
@@ -62,7 +61,7 @@ public class BucketServiceImpl implements BucketService {
 
     @Override
     public void deleteItem(Bucket bucket, Item item) {
-        Storage.buckets
+        bucketDao.getAll()
                 .stream()
                 .filter(neededBucket -> neededBucket.equals(bucket))
                 .findFirst()
@@ -72,7 +71,7 @@ public class BucketServiceImpl implements BucketService {
 
     @Override
     public void clear(Bucket bucket) {
-        Storage.buckets
+        bucketDao.getAll()
                 .stream()
                 .filter(bucket1 -> bucket1.equals(bucket))
                 .findFirst()
@@ -84,7 +83,7 @@ public class BucketServiceImpl implements BucketService {
 
     @Override
     public List<Item> getAllItems(Bucket bucket) {
-        return Storage.buckets
+        return bucketDao.getAll()
                 .stream()
                 .filter(bucket1 -> bucket1.equals(bucket))
                 .map(Bucket::getItems)
