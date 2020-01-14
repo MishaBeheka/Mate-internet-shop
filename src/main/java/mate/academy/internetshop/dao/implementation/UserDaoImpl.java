@@ -1,6 +1,5 @@
 package mate.academy.internetshop.dao.implementation;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import mate.academy.internetshop.dao.UserDao;
@@ -19,11 +18,10 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> get(Long id) {
-        return Optional.ofNullable(Storage.users
+        return Storage.users
                 .stream()
                 .filter(u -> u.getUserId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("Can't find user with id " + id)));
+                .findFirst();
     }
 
     @Override

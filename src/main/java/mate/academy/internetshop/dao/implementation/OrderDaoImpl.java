@@ -1,6 +1,5 @@
 package mate.academy.internetshop.dao.implementation;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import mate.academy.internetshop.dao.OrderDao;
@@ -18,12 +17,11 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Optional<Order> get(Long id) {
-        return Optional.ofNullable(Storage.orders
+        return Storage.orders
                 .stream()
                 .filter(order -> order.getOrderId().equals(id))
-                .findFirst()
-                .orElseThrow(() ->
-                        new NoSuchElementException("Can't find order with ID " + id)));
+                .findFirst();
+
     }
 
     @Override
