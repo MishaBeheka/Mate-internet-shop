@@ -18,7 +18,6 @@
         <servlet-name>registrationUsers</servlet-name>
         <servlet-class>mate.academy.internetshop.controller.RegistrationUserController</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>registrationUsers</servlet-name>
         <url-pattern>/registrationUsers</url-pattern>
