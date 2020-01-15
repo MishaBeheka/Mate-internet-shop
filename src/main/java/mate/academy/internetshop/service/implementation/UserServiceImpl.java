@@ -57,6 +57,11 @@ public class UserServiceImpl implements UserService {
         return user.get();
     }
 
+    @Override
+    public Optional<User> findByToken(String token) {
+        return userDao.findByToken(token);
+    }
+
     private String getToken() {
         return UUID.randomUUID().toString();
     }
