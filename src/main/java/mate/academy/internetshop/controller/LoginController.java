@@ -2,6 +2,7 @@ package mate.academy.internetshop.controller;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,13 +30,12 @@ public class LoginController extends HttpServlet {
         String password = req.getParameter("psw");
         try {
             User user = userService.login(login, password);
+            Cookie cookie = new Cookie("MATE", user.getToken());
+            resp.addCookie(cookie);
             resp.sendRedirect(req.getContextPath() + "/index");
         } catch (AuthenticationException e) {
             req.setAttribute("errorMsg", "Incorrect login or password");
             req.getRequestDispatcher("WEB-INF/views/login.jsp").forward(req, resp);
-
         }
-
-
     }
 }

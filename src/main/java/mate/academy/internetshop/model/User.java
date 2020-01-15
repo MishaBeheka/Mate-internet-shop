@@ -13,6 +13,7 @@ public class User {
     private String phone;
     private String login;
     private String password;
+    private String token;
 
     public User(String firstName, String lastName, String address,
                 String phone, String login, String password) {
@@ -78,6 +79,14 @@ public class User {
         this.password = password;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -93,7 +102,8 @@ public class User {
                 && Objects.equals(address, user.address)
                 && Objects.equals(phone, user.phone)
                 && Objects.equals(login, user.login)
-                && Objects.equals(password, user.password);
+                && Objects.equals(password, user.password)
+                && Objects.equals(token, user.token);
     }
 
     @Override
