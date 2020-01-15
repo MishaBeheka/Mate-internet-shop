@@ -27,6 +27,6 @@ public class DeleteItemFromBucketController extends HttpServlet {
         Bucket bucket = bucketService.getByUserId(USER_ID);
         Item item = itemService.get(Long.valueOf(itemId));
         bucketService.deleteItem(bucket, item);
-        resp.sendRedirect(req.getContextPath() + "/bucket");
+        resp.sendRedirect(req.getContextPath() + "/servlet/bucket");
     }
 }

@@ -2,6 +2,7 @@ package mate.academy.internetshop.controller;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,20 +19,21 @@ public class RegistrationUserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getRequestDispatcher("WEB-INF/views/registrationUsers.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/registrationUsers.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        User user = new User(req.getParameter("first_name"),
+        User newUser = new User(req.getParameter("first_name"),
                 req.getParameter("last_name"),
                 req.getParameter("address"),
                 req.getParameter("phone"),
                 req.getParameter("email"),
                 req.getParameter("psw"));
-        userService.create(user);
-
-        resp.sendRedirect(req.getContextPath() + "/getAllUsers");
+        User user = userService.create(newUser);
+        Cookie cookie = new Cookie("MATE", user.getToken());
+        resp.addCookie(cookie);
+        resp.sendRedirect(req.getContextPath() + "/servlet/index");
     }
 }

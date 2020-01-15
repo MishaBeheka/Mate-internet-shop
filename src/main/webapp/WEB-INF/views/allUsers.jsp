@@ -40,6 +40,6 @@
         </tr>
     </c:forEach>
 </table>
-<p><a href="index">Home</a></p>
+<p><a href="${pageContext.request.contextPath}/servlet/index">Home</a></p>
 </body>
 </html>

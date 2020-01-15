@@ -18,7 +18,7 @@ public class AddItemController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getRequestDispatcher("WEB-INF/views/addItem.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/addItem.jsp").forward(req, resp);
     }
 
     @Override
@@ -27,6 +27,6 @@ public class AddItemController extends HttpServlet {
         Item item = new Item(req.getParameter("name_item"),
                 Double.parseDouble(req.getParameter("price")));
         itemService.create(item);
-        resp.sendRedirect(req.getContextPath() + "/addItem");
+        resp.sendRedirect(req.getContextPath() + "/servlet/addItem");
     }
 }

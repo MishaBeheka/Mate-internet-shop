@@ -32,6 +32,6 @@ public class CompleteOrderController extends HttpServlet {
         List<Item> items = bucket.getItems();
         User user = userService.get(USER_ID);
         orderService.completeOrder(items, user);
-        resp.sendRedirect(req.getContextPath() + "/orders");
+        resp.sendRedirect(req.getContextPath() + "/servlet/orders");
     }
 }
