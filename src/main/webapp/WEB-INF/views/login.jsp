@@ -5,8 +5,8 @@
     <title>Login</title>
 </head>
 <body>
-It is login
-<form action="/internet_shop_war_exploded/login" method="post">
+<div>${errorMsg}</div>
+<form action="${pageContext.request.contextPath}/login" method="post">
     <div class="container">
         <h1>Login</h1>
         <p>Please fill in this form to sign into account.</p>
