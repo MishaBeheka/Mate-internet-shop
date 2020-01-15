@@ -2,6 +2,7 @@ package mate.academy.internetshop.service.implementation;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.lib.Inject;
@@ -42,5 +43,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return userDao.getAll();
+    }
+
+    @Override
+    public User login(String login, String psw) {
+        Optional<User> user = userDao.findByLogin(login);
+        if (user.isEmpty() || !user.get().getPassword().equals(psw)) {
+            throw new RuntimeException("Incorrect login or password ");
+        }
+        return user.get();
     }
 }

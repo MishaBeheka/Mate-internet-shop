@@ -105,6 +105,15 @@
         <url-pattern>/deleteOrder</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>loginController</servlet-name>
+        <servlet-class>mate.academy.internetshop.controller.LoginController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>loginController</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
 
 
     <listener>
