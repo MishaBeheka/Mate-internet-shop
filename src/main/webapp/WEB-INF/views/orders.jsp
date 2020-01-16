@@ -39,11 +39,11 @@ It is orders
                 </table>
             </td>
             <td>
-                <a href="${pageContext.request.contextPath}/deleteOrder?order_id=${order.orderId}">DELETE</a>
+                <a href="${pageContext.request.contextPath}/servlet/deleteOrder?order_id=${order.orderId}">DELETE</a>
             </td>
         </tr>
     </c:forEach>
 </table>
-<p><a href="index">Home</a></p>
+<p><a href="${pageContext.request.contextPath}/servlet/index">Home</a></p>
 </body>
 </html>
