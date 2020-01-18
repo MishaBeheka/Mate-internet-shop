@@ -9,5 +9,7 @@
 <p><a href="getAllItems">Show items in the shop</a></p>
 <p><a href="bucket">Show Bucket</a></p>
 <p><a href="orders">Show Orders</a></p>
+<p><a href="${pageContext.request.contextPath}/login">Login</a></p>
+<p><a href="${pageContext.request.contextPath}/logout">Logout</a></p>
 </body>
 </html>
