@@ -23,7 +23,7 @@
     </div>
 
     <div class="container signin">
-        <p>Don't have an account? <a href="#">Sign up</a>.</p>
+        <p>Don't have an account? <a href="registrationUsers">Sign up</a>.</p>
     </div>
 </form>
 </body>

@@ -5,40 +5,55 @@
 </head>
 <body>
 Let's create a new User
-<form action="/internet_shop_war_exploded/registrationUsers" method="post">
+<form action="${pageContext.request.contextPath}/registrationUsers" method="post">
     <div class="container">
         <h1>Register</h1>
         <p>Please fill in this form to create an account.</p>
         <hr>
+        <div>
+            <label for="first_name"><b>First Name</b></label>
+            <input type="text" placeholder="Enter First Name" name="first_name"  id="first_name" required>
+        </div>
 
-        <label for="first_name"><b>First Name</b></label>
-        <input type="text" placeholder="Enter First Name" name="first_name" required>
+        <div>
+            <label for="last_name"><b>Last Name</b></label>
+            <input type="text" placeholder="Enter Last Name" name="last_name"  id="last_name" required>
+        </div>
 
-        <label for="last_name"><b>Last Name</b></label>
-        <input type="text" placeholder="Enter Last Name" name="last_name" required>
+        <div>
+            <label for="address"><b>Address</b></label>
+            <input type="text" placeholder="Enter address" name="address" id="address" required>
+        </div>
 
-        <label for="address"><b>Address</b></label>
-        <input type="text" placeholder="Enter address" name="address" required>
+        <div>
+            <label for="phone"><b>Phone</b></label>
+            <input type="text" placeholder="Enter phone" name="phone" id="phone" required>
+        </div>
 
-        <label for="phone"><b>Phone</b></label>
-        <input type="text" placeholder="Enter phone" name="phone" required>
+        <div>
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter email" name="email" id="email" required>
+        </div>
 
-        <label for="email"><b>Email</b></label>
-        <input type="text" placeholder="Enter email" name="email" required>
+        <div>
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+        </div>
 
-        <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
+        <div>
+            <label for="psw-repeat"><b>Repeat Password</b></label>
+            <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
 
-        <label for="psw-repeat"><b>Repeat Password</b></label>
-        <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+        </div>
         <hr>
 
         <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
         <button type="submit" class="registerbtn">Register</button>
+        <button type="button"  class="btn">Basic</button>
     </div>
 
     <div class="container signin">
-        <p>Already have an account? <a href="#">Sign in</a>.</p>
+        <p>Already have an account? <a href="login">Sign in</a>.</p>
     </div>
 </form>
 </body>
