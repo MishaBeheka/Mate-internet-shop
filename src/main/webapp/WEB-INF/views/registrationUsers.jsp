@@ -10,6 +10,7 @@
             <h2>Register</h2>
             <p>Please fill in this form to create an account.</p>
             <hr>
+
             <div class="form-group">
                 <label for="first_name"><b>First Name</b></label>
                 <input type="text" class="form-control" placeholder="Enter First Name" name="first_name" id="first_name" required>
