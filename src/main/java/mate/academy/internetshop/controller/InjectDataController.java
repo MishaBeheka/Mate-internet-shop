@@ -20,8 +20,6 @@ public class InjectDataController extends HttpServlet {
             throws ServletException, IOException {
         User user = new User("Vladimir",
                 "Dolik",
-                "Kyiv",
-                "222-22-22",
                 "user",
                 "111");
         user.addRole(Role.of("USER"));
@@ -29,8 +27,6 @@ public class InjectDataController extends HttpServlet {
 
         User admin = new User("Taras",
                 "Lopin",
-                "Odessa",
-                "777-77-77",
                 "admin",
                 "222");
         admin.addRole(Role.of("ADMIN"));

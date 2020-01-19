@@ -11,10 +11,10 @@
         <hr>
 
         <label for="name_item"><b>New item</b></label>
-        <input type="text" placeholder="Enter item" name="name_item" required>
+        <input type="text" placeholder="Enter item" name="name_item" id="name_item" required>
 
         <label for="price"><b>Price</b></label>
-        <input type="number" placeholder="Enter price of item" name="price" required>
+        <input type="number" placeholder="Enter price of item" name="price" id="price" required>
         <hr>
 
         <button type="submit">Add new item</button>

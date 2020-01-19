@@ -11,21 +11,16 @@ public class User {
     private Long userId;
     private String firstName;
     private String lastName;
-    private String address;
-    private String phone;
     private String login;
     private String password;
     private String token;
     private Set<Role> roles = new HashSet<>();
 
-    public User(String firstName, String lastName, String address,
-                String phone, String login, String password) {
+    public User(String firstName, String lastName, String login, String password) {
 
         this.userId = ++idGenerator;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.address = address;
-        this.phone = phone;
         this.login = login;
         this.password = password;
     }
@@ -60,22 +55,6 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getLogin() {
@@ -114,8 +93,6 @@ public class User {
         return Objects.equals(userId, user.userId)
                 && Objects.equals(firstName, user.firstName)
                 && Objects.equals(lastName, user.lastName)
-                && Objects.equals(address, user.address)
-                && Objects.equals(phone, user.phone)
                 && Objects.equals(login, user.login)
                 && Objects.equals(password, user.password)
                 && Objects.equals(token, user.token);
@@ -123,7 +100,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, firstName, lastName, address, phone, login, password);
+        return Objects.hash(userId, firstName, lastName, login, password);
     }
 
     @Override
@@ -132,8 +109,6 @@ public class User {
                 + "userId=" + userId
                 + ", firstName='" + firstName + '\''
                 + ", lastName='" + lastName + '\''
-                + ", address='" + address + '\''
-                + ", phone='" + phone + '\''
                 + ", login='" + login + '\''
                 + ", password='" + password + '\''
                 + '}';

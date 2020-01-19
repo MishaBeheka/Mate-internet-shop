@@ -29,8 +29,6 @@ public class RegistrationUserController extends HttpServlet {
             throws ServletException, IOException {
         User newUser = new User(req.getParameter("first_name"),
                 req.getParameter("last_name"),
-                req.getParameter("address"),
-                req.getParameter("phone"),
                 req.getParameter("email"),
                 req.getParameter("psw"));
         newUser.addRole(Role.of("USER"));

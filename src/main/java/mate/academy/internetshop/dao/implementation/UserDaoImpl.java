@@ -34,10 +34,8 @@ public class UserDaoImpl implements UserDao {
                 .map(updateUser -> {
                     updateUser.setFirstName(user.getFirstName());
                     updateUser.setLastName(user.getLastName());
-                    updateUser.setAddress(user.getAddress());
                     updateUser.setLogin(user.getLogin());
                     updateUser.setPassword(user.getPassword());
-                    updateUser.setPhone(user.getPhone());
                     return updateUser;
                 })
                 .orElseThrow(() -> new RuntimeException("User isn't update " + user));
