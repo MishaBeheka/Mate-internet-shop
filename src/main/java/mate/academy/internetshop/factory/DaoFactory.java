@@ -9,9 +9,9 @@ import mate.academy.internetshop.dao.ItemDao;
 import mate.academy.internetshop.dao.OrderDao;
 import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.dao.implementation.BucketDaoImpl;
-import mate.academy.internetshop.dao.implementation.ItemDaoImpl;
 import mate.academy.internetshop.dao.implementation.OrderDaoImpl;
 import mate.academy.internetshop.dao.implementation.UserDaoImpl;
+import mate.academy.internetshop.dao.jdbc.ItemDaoJdbcImpl;
 import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.ItemService;
 import mate.academy.internetshop.service.OrderService;
@@ -38,7 +38,7 @@ public class DaoFactory {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection =
-                    DriverManager.getConnection("jdbc:mysql://localhost:3306/pets?"
+                    DriverManager.getConnection("jdbc:mysql://localhost:3306/internet_shop?"
                             + "user=root&password=MySQL101101&serverTimezone=UTC");
         } catch (ClassNotFoundException | SQLException e) {
             logger.error("Can't establish connection to DB", e);
@@ -62,7 +62,7 @@ public class DaoFactory {
 
     public static ItemDao getItemDao() {
         if (itemDao == null) {
-            itemDao = new ItemDaoImpl();
+            itemDao = new ItemDaoJdbcImpl(connection);
         }
         return itemDao;
     }

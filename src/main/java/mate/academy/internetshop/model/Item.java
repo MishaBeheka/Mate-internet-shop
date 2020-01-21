@@ -3,15 +3,12 @@ package mate.academy.internetshop.model;
 import java.util.Objects;
 
 public class Item {
-    private static Long idGenerator = 0L;
-    private Long itemId;
+    private final Long itemId;
     private String name;
     private Double price;
 
-    public Item(String name, Double price) {
-        this.itemId = ++idGenerator;
-        this.name = name;
-        this.price = price;
+    public Item(Long itemId) {
+        this.itemId = itemId;
     }
 
     public Long getItemId() {
