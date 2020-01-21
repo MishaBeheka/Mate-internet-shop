@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,6 +91,21 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public List<Item> getAll() {
-        return null;
+        List<Item> items = new ArrayList<>();
+        try (PreparedStatement preparedSt =
+                     connection.prepareStatement("SELECT * FROM " + DB_NAME + ".items")) {
+            try (ResultSet resultSet = preparedSt.executeQuery()) {
+                while (resultSet.next()) {
+                    Item item = new Item();
+                    item.setItemId(resultSet.getLong("item_id"));
+                    item.setName(resultSet.getString("name"));
+                    item.setPrice(resultSet.getDouble("price"));
+                    items.add(item);
+                }
+            }
+        } catch (SQLException e) {
+            logger.info("Can't show items " + e);
+        }
+        return items;
     }
 }
