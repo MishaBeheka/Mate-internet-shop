@@ -13,7 +13,7 @@
         <servlet-name>index</servlet-name>
         <url-pattern>/servlet/index</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>registrationUsers</servlet-name>
         <servlet-class>mate.academy.internetshop.controller.RegistrationUserController</servlet-class>
@@ -22,7 +22,7 @@
         <servlet-name>registrationUsers</servlet-name>
         <url-pattern>/registrationUsers</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>getAllUsers</servlet-name>
         <servlet-class>mate.academy.internetshop.controller.GetAllUsersController</servlet-class>
@@ -49,7 +49,7 @@
         <servlet-name>addItem</servlet-name>
         <url-pattern>/servlet/addItem</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>bucketController</servlet-name>
         <servlet-class>mate.academy.internetshop.controller.BucketController</servlet-class>
@@ -58,7 +58,7 @@
         <servlet-name>bucketController</servlet-name>
         <url-pattern>/servlet/bucket</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>addItemToBucket</servlet-name>
         <servlet-class>mate.academy.internetshop.controller.AddItemToBucketController</servlet-class>
@@ -76,7 +76,7 @@
         <servlet-name>deleteItemFromBucketController</servlet-name>
         <url-pattern>/servlet/deleteItemFromBucket</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>ordersController</servlet-name>
         <servlet-class>mate.academy.internetshop.controller.OrderController</servlet-class>
@@ -113,6 +113,24 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>injectDataController</servlet-name>
+        <servlet-class>mate.academy.internetshop.controller.InjectDataController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>injectDataController</servlet-name>
+        <url-pattern>/inject</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>logoutController</servlet-name>
+        <servlet-class>mate.academy.internetshop.controller.LogoutController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>logoutController</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
     <filter>
         <filter-name>auth-filter</filter-name>
         <filter-class>mate.academy.internetshop.web.filters.AuthenticationFilter</filter-class>
@@ -122,10 +140,18 @@
         <url-pattern>/servlet/*</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>authorizationFilter</filter-name>
+        <filter-class>mate.academy.internetshop.web.filters.AuthorizationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>authorizationFilter</filter-name>
+        <url-pattern>/servlet/*</url-pattern>
+    </filter-mapping>
 
 
     <listener>
         <listener-class>mate.academy.internetshop.controller.InjectInitializer</listener-class>
     </listener>
-    
+
 </web-app>

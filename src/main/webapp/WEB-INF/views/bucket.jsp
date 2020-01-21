@@ -15,8 +15,6 @@ This is bucket
         <th>Name</th>
         <th>Price</th>
         <th>Delete</th>
-
-
     </tr>
     <c:forEach var="item" items="${bucket.items}">
         <tr>

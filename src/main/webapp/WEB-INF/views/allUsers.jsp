@@ -1,45 +1,42 @@
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:useBean id="users" scope="request" type="java.util.List<mate.academy.internetshop.model.User>"/>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <html>
 <head>
     <title>All users</title>
 </head>
 <body>
-<h1>These are all users</h1>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Address</th>
-        <th>Phone</th>
-        <th>Login</th>
-    </tr>
-    <c:forEach var = "user" items = "${users}">
+<div class="container">
+    <h2>These are all users</h2>
+    <table class="table table-bordered">
         <tr>
-            <td>
-                <c:out value="${user.userId}" />
-            </td>
-            <td>
-                <c:out value="${user.firstName}" />
-            </td>
-            <td>
-                <c:out value="${user.lastName}" />
-            </td>
-            <td>
-                <c:out value="${user.address}" />
-            </td>
-            <td>
-                <c:out value="${user.phone}" />
-            </td>
-            <td>
-                <c:out value="${user.login}" />
-            </td>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Login</th>
         </tr>
-    </c:forEach>
-</table>
-<p><a href="${pageContext.request.contextPath}/servlet/index">Home</a></p>
+        <tbody>
+        <c:forEach var="user" items="${users}">
+            <tr>
+                <td>
+                    <c:out value="${user.userId}"/>
+                </td>
+                <td>
+                    <c:out value="${user.firstName}"/>
+                </td>
+                <td>
+                    <c:out value="${user.lastName}"/>
+                </td>
+                <td>
+                    <c:out value="${user.login}"/>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+    <p><a href="${pageContext.request.contextPath}/servlet/index">Home</a></p>
+</div>
+
 </body>
 </html>
