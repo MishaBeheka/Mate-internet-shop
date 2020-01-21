@@ -1,6 +1,7 @@
 package mate.academy.internetshop.dao.jdbc;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,8 +23,22 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     }
 
     @Override
-    public Item create(Item entity) {
-        return null;
+    public Item create(Item item) {
+        String name = item.getName();
+        double price = item.getPrice();
+        try (PreparedStatement pr =
+                     connection.prepareStatement("INSERT INTO " + DB_NAME + ".items (name, price) "
+                             + "VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            pr.setString(1, name);
+            pr.setDouble(2, price);
+            pr.executeUpdate();
+            ResultSet rs = pr.getGeneratedKeys();
+            rs.next();
+            item.setItemId(rs.getLong(1));
+        } catch (SQLException e) {
+            logger.warn("Item wasn't created " + e);
+        }
+        return item;
     }
 
     @Override
@@ -37,7 +52,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                 long item_id = rs.getLong("item_id");
                 String name = rs.getString("name");
                 double price = rs.getDouble("price");
-                Item item = new Item(item_id);
+                Item item = new Item();
+                item.setItemId(item_id);
                 item.setName(name);
                 item.setPrice(price);
                 return Optional.of(item);

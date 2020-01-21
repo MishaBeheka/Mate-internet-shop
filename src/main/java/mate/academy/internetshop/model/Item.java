@@ -3,11 +3,11 @@ package mate.academy.internetshop.model;
 import java.util.Objects;
 
 public class Item {
-    private final Long itemId;
+    private Long itemId;
     private String name;
     private Double price;
 
-    public Item(Long itemId) {
+    public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
 
