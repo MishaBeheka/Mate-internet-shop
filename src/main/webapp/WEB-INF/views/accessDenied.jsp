@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="alert alert-danger">
-    <strong>Danger!</strong> Sorry but requested is denied for you :(
+    <strong>Danger!</strong> Sorry but requested page is denied for you :(
 </div>
 
 <div class="form-inline">
