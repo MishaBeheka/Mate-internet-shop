@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import mate.academy.internetshop.dao.ItemDao;
@@ -56,8 +57,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public Item update(Item item) {
-        String query = String.format(
-                "UPDATE %s.items SET name = '%s', price = %s, WHERE item_id = %d;",
+        String query = String.format(Locale.ROOT,
+                "UPDATE %s.items SET name = '%s', price = %.2f WHERE item_id = %d;",
                 DB_NAME, item.getName(), item.getPrice(), item.getItemId());
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(query);
@@ -69,6 +70,14 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public boolean deleteById(Long id) {
+        String query = String.format("DELETE FROM %s.items WHERE item_id = %d",
+                DB_NAME, id);
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(query);
+            return true;
+        } catch (SQLException e) {
+            logger.error("Cannot delete item" + e);
+        }
         return false;
     }
 
