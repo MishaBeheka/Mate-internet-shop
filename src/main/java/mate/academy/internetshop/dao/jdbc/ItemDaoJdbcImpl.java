@@ -27,7 +27,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     public Item create(Item item) {
         String name = item.getName();
         double price = item.getPrice();
-        String query = String.format("INSERT INTO %s.items (name, price) VALUES('%s',%f)", DB_NAME, name, price);
+        String query = String.format("INSERT INTO %s.items (name, price) VALUES('%s',%s)", DB_NAME, name, price);
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(query);
         } catch (SQLException e) {
@@ -86,9 +86,9 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     @Override
     public List<Item> getAll() {
         List<Item> items = new ArrayList<>();
-        try (PreparedStatement preparedSt =
-                     connection.prepareStatement("SELECT * FROM " + DB_NAME + ".items")) {
-            try (ResultSet resultSet = preparedSt.executeQuery()) {
+        String query = String.format("SELECT * FROM %s.items", DB_NAME);
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(query);
                 while (resultSet.next()) {
                     Item item = new Item();
                     item.setItemId(resultSet.getLong("item_id"));
@@ -96,7 +96,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                     item.setPrice(resultSet.getDouble("price"));
                     items.add(item);
                 }
-            }
+
         } catch (SQLException e) {
             logger.info("Can't show items " + e);
         }
