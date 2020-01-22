@@ -25,7 +25,6 @@ public class AddItemController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         Item item = new Item();
-        //item.setItemId(Long.parseLong(req.getParameter("item_id")));
         item.setName(req.getParameter("name_item"));
         item.setPrice(Double.parseDouble(req.getParameter("price")));
         itemService.create(item);

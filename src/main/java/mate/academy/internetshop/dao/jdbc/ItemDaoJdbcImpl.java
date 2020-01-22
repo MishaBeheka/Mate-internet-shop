@@ -86,15 +86,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public boolean deleteByEntity(Item item) {
-        String query = String.format("DELETE FROM %s.items WHERE item_id = %d",
-                DB_NAME, item.getItemId());
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(query);
-            return true;
-        } catch (SQLException e) {
-            logger.error("Item wasn't deleted " + e);
-        }
-        return false;
+       return deleteById(item.getItemId());
     }
 
     @Override
