@@ -27,7 +27,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     public Item create(Item item) {
         String name = item.getName();
         double price = item.getPrice();
-        String query = String.format("INSERT INTO %s.items (name, price) VALUES('%s',%s)", DB_NAME, name, price);
+        String query = String.format("INSERT INTO %s.items (name, price) VALUES('%s',%s)",
+                DB_NAME, name, price);
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(query);
         } catch (SQLException e) {
@@ -42,11 +43,11 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                long item_id = resultSet.getLong("item_id");
+                long itemId = resultSet.getLong("item_id");
                 String name = resultSet.getString("name");
                 double price = resultSet.getDouble("price");
                 Item item = new Item();
-                item.setItemId(item_id);
+                item.setItemId(itemId);
                 item.setName(name);
                 item.setPrice(price);
                 return Optional.of(item);
