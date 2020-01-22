@@ -18,7 +18,8 @@ public class IndexController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        itemService.deleteById(27L);
+        Item item = itemService.get(26L);
+        itemService.deleteByEntity(item);
         req.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(req, resp);
     }
 }

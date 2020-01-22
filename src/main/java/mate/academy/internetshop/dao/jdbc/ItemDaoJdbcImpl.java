@@ -38,17 +38,19 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public Optional<Item> get(Long id) {
-        String query = String.format("SELECT * FROM %s.items where item_id = %d;", DB_NAME, id);
+        String query = String.format("SELECT * FROM %s.items WHERE item_id = %d;", DB_NAME, id);
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
-            long item_id = resultSet.getLong("item_id");
-            String name = resultSet.getString("name");
-            double price = resultSet.getDouble("price");
-            Item item = new Item();
-            item.setItemId(item_id);
-            item.setName(name);
-            item.setPrice(price);
-            return Optional.of(item);
+            while (resultSet.next()) {
+                long item_id = resultSet.getLong("item_id");
+                String name = resultSet.getString("name");
+                double price = resultSet.getDouble("price");
+                Item item = new Item();
+                item.setItemId(item_id);
+                item.setName(name);
+                item.setPrice(price);
+                return Optional.of(item);
+            }
         } catch (SQLException e) {
             logger.error("Can't get item by id " + id);
         }
@@ -76,13 +78,21 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
             statement.executeUpdate(query);
             return true;
         } catch (SQLException e) {
-            logger.error("Cannot delete item" + e);
+            logger.error("Item with id " + id + " wasn't deleted " + e);
         }
         return false;
     }
 
     @Override
-    public boolean deleteByEntity(Item entity) {
+    public boolean deleteByEntity(Item item) {
+        String query = String.format("DELETE FROM %s.items WHERE item_id = %d",
+                DB_NAME, item.getItemId());
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(query);
+            return true;
+        } catch (SQLException e) {
+            logger.error("Item wasn't deleted " + e);
+        }
         return false;
     }
 
