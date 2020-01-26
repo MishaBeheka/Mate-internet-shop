@@ -27,7 +27,8 @@ public class RegistrationUserController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        User newUser = new User(req.getParameter("first_name"),
+        User newUser = new User(null,
+                req.getParameter("first_name"),
                 req.getParameter("last_name"),
                 req.getParameter("email"),
                 req.getParameter("psw"));

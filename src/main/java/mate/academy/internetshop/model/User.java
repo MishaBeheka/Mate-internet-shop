@@ -5,9 +5,6 @@ import java.util.Objects;
 import java.util.Set;
 
 public class User {
-
-    private static Long idGenerator = 0L;
-
     private Long userId;
     private String firstName;
     private String lastName;
@@ -16,13 +13,19 @@ public class User {
     private String token;
     private Set<Role> roles = new HashSet<>();
 
-    public User(String firstName, String lastName, String login, String password) {
+    public User() {}
 
-        this.userId = ++idGenerator;
+    public User(Long userId, String firstName, String lastName, String login, String password) {
+
+        this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.login = login;
         this.password = password;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Set<Role> getRoles() {
