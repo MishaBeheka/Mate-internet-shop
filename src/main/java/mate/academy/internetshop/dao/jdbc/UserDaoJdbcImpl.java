@@ -105,7 +105,6 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.setString(5, user.getToken());
             preparedStatement.executeUpdate();
-
         } catch (SQLException e) {
             logger.info("User wasn't updated ", e);
         }
@@ -133,8 +132,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
-        try (PreparedStatement prSt = connection.prepareStatement(""
-                + "SELECT * FROM internet_shop.users")) {
+        try (PreparedStatement prSt = connection.prepareStatement("SELECT * FROM internet_shop.users")) {
             try (ResultSet resultSet = prSt.executeQuery()) {
                 while (resultSet.next()) {
                     User user = new User();
