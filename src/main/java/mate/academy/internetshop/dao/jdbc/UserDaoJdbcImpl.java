@@ -6,13 +6,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import mate.academy.internetshop.dao.UserDao;
+import mate.academy.internetshop.lib.Dao;
+import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
 import org.apache.log4j.Logger;
 
+@Dao
 public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     private static Logger logger = Logger.getLogger(UserDaoJdbcImpl.class);
     private static String DB_NAME_USERS = "internet_shop.users";
@@ -42,7 +47,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                          connection.prepareStatement("INSERT INTO " + DB_NAME_USER_ROLES
                                  + " (user_id, role_id) VALUES (?, ?)")) {
                 prStatementRole.setLong(1, user.getUserId());
-                prStatementRole.setLong(1, 1);
+                prStatementRole.setLong(2, 1);
                 prStatementRole.executeUpdate();
             }
         } catch (SQLException e) {
@@ -54,19 +59,28 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     @Override
     public Optional<User> get(Long id) {
         User user = new User();
+        Set<Role> roles = new HashSet<>();
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(
-                             "SELECT user_id, first_name, last_name, login, password, token FROM "
-                                     + DB_NAME_USERS + " WHERE user_id = " + id)) {
+                             "SELECT * FROM internet_shop.users "
+                                     + "INNER JOIN internet_shop.user_roles "
+                                     + "ON users.user_id = user_roles.user_id "
+                                     + "INNER JOIN internet_shop.role "
+                                     + "using (role_id) "
+                                     + "WHERE internet_shop.users.user_id = ?")) {
+            preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    user.setUserId(resultSet.getLong(1));
-                    user.setFirstName(resultSet.getString(2));
-                    user.setLastName(resultSet.getString(3));
-                    user.setLogin(resultSet.getString(4));
-                    user.setPassword(resultSet.getString(5));
-                    user.setToken(resultSet.getString(6));
+                    user.setUserId(resultSet.getLong("user_id"));
+                    user.setFirstName(resultSet.getString("first_name"));
+                    user.setLastName(resultSet.getString("last_name"));
+                    user.setLogin(resultSet.getString("login"));
+                    user.setPassword(resultSet.getString("password"));
+                    user.setToken(resultSet.getString("token"));
+                    Role role = Role.of(resultSet.getString("role_name"));
+                    roles.add(role);
                 }
+                user.setRoles(roles);
                 return Optional.of(user);
             }
         } catch (SQLException e) {
@@ -100,8 +114,8 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public boolean deleteById(Long id) {
-        try (PreparedStatement preparedStatement =
-                     connection.prepareStatement("DELETE FROM internet_shop.users WHERE user_id = ?")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                "DELETE FROM internet_shop.users WHERE user_id = ?")) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
             return true;
@@ -142,19 +156,28 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     @Override
     public Optional<User> findByLogin(String login) {
         User user = new User();
+        Set<Role> roles = new HashSet<>();
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(
-                             "SELECT user_id, first_name, last_name, login, password, token FROM "
-                                     + DB_NAME_USERS + " WHERE login = " + login)) {
+                             "SELECT * FROM internet_shop.users "
+                                     + "INNER JOIN internet_shop.user_roles "
+                                     + "ON users.user_id = user_roles.user_id "
+                                     + "INNER JOIN internet_shop.role "
+                                     + "using (role_id) "
+                                     + "WHERE internet_shop.users.login = ?")) {
+            preparedStatement.setString(1, login);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    user.setUserId(resultSet.getLong(1));
-                    user.setFirstName(resultSet.getString(2));
-                    user.setLastName(resultSet.getString(3));
-                    user.setLogin(resultSet.getString(4));
-                    user.setPassword(resultSet.getString(5));
-                    user.setToken(resultSet.getString(6));
+                    user.setUserId(resultSet.getLong("user_id"));
+                    user.setFirstName(resultSet.getString("first_name"));
+                    user.setLastName(resultSet.getString("last_name"));
+                    user.setLogin(resultSet.getString("login"));
+                    user.setPassword(resultSet.getString("password"));
+                    user.setToken(resultSet.getString("token"));
+                    Role role = Role.of(resultSet.getString("role_name"));
+                    roles.add(role);
                 }
+                user.setRoles(roles);
                 return Optional.of(user);
             }
         } catch (SQLException e) {
@@ -169,7 +192,8 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(
                              "SELECT user_id, first_name, last_name, login, password, token FROM "
-                                     + DB_NAME_USERS + " WHERE token = " + token)) {
+                                     + DB_NAME_USERS + " WHERE token = ?")) {
+            preparedStatement.setString(1, token);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     user.setUserId(resultSet.getLong(1));

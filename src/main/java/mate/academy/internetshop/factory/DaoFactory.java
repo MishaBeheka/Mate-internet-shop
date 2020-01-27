@@ -12,6 +12,7 @@ import mate.academy.internetshop.dao.implementation.BucketDaoImpl;
 import mate.academy.internetshop.dao.implementation.OrderDaoImpl;
 import mate.academy.internetshop.dao.implementation.UserDaoImpl;
 import mate.academy.internetshop.dao.jdbc.ItemDaoJdbcImpl;
+import mate.academy.internetshop.dao.jdbc.UserDaoJdbcImpl;
 import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.ItemService;
 import mate.academy.internetshop.service.OrderService;
@@ -48,7 +49,7 @@ public class DaoFactory {
 
     public static UserDao getUserDao() {
         if (userDao == null) {
-            userDao = new UserDaoImpl();
+            userDao = new UserDaoJdbcImpl(connection);
         }
         return userDao;
     }
