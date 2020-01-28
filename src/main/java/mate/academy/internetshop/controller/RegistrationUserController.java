@@ -8,12 +8,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.UserService;
+import org.apache.log4j.Logger;
 
 public class RegistrationUserController extends HttpServlet {
+    private static Logger logger = Logger.getLogger(RegistrationUserController.class);
 
     @Inject
     private static UserService userService;
@@ -33,7 +36,14 @@ public class RegistrationUserController extends HttpServlet {
                 req.getParameter("email"),
                 req.getParameter("psw"));
         newUser.addRole(Role.of("USER"));
-        User user = userService.create(newUser);
+        User user = null;
+        try {
+            user = userService.create(newUser);
+        } catch (DataProcessingException e) {
+            logger.error(e);
+            req.setAttribute("error_msg", e.getMessage());
+            req.getRequestDispatcher("/WEB-INF/views/errorDB.jsp").forward(req, resp);
+        }
 
         HttpSession session = req.getSession();
         session.setAttribute("userId", user.getUserId());

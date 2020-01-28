@@ -10,20 +10,18 @@ import java.util.List;
 import java.util.Optional;
 
 import mate.academy.internetshop.dao.ItemDao;
+import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.model.Item;
-import org.apache.log4j.Logger;
 
 @Dao
 public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
-    private static Logger logger = Logger.getLogger(ItemDaoJdbcImpl.class);
-
     public ItemDaoJdbcImpl(Connection connection) {
         super(connection);
     }
 
     @Override
-    public Item create(Item item) {
+    public Item create(Item item) throws DataProcessingException {
         try (PreparedStatement pr =
                      connection.prepareStatement(
                              "INSERT INTO internet_shop.items (name, price) VALUES (?, ?)",
@@ -36,13 +34,13 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                 item.setItemId(resultSet.getLong(1));
             }
         } catch (SQLException e) {
-            logger.error("Can't create item ", e);
+            throw new DataProcessingException("Can't create item " + e);
         }
         return item;
     }
 
     @Override
-    public Optional<Item> get(Long id) {
+    public Optional<Item> get(Long id) throws DataProcessingException {
         Item item = new Item();
         try (PreparedStatement ps =
                      connection.prepareStatement(
@@ -57,13 +55,12 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                 return Optional.of(item);
             }
         } catch (SQLException e) {
-            logger.error("Can't get item by id " + id);
+            throw new DataProcessingException("Can't get item by id " + id);
         }
-        return Optional.empty();
     }
 
     @Override
-    public Item update(Item item) {
+    public Item update(Item item) throws DataProcessingException {
         try (PreparedStatement ps =
                      connection.prepareStatement(
                              "UPDATE internet_shop.items SET name = ?,"
@@ -73,13 +70,13 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
             ps.setLong(3, item.getItemId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            logger.error("Item wasn't updated " + e);
+            throw new DataProcessingException("Item wasn't updated " + e);
         }
         return item;
     }
 
     @Override
-    public boolean deleteById(Long id) {
+    public boolean deleteById(Long id) throws DataProcessingException {
         try (PreparedStatement pr =
                      connection.prepareStatement(
                              "DELETE FROM internet_shop.items WHERE item_id = ?")) {
@@ -87,18 +84,17 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
             pr.executeUpdate();
             return true;
         } catch (SQLException e) {
-            logger.error("Item with id " + id + " wasn't deleted " + e);
+            throw new DataProcessingException("Item with id " + id + " wasn't deleted " + e);
         }
-        return false;
     }
 
     @Override
-    public boolean deleteByEntity(Item item) {
+    public boolean deleteByEntity(Item item) throws DataProcessingException {
         return deleteById(item.getItemId());
     }
 
     @Override
-    public List<Item> getAll() {
+    public List<Item> getAll() throws DataProcessingException {
         List<Item> items = new ArrayList<>();
         try (PreparedStatement pr =
                      connection.prepareStatement("SELECT * FROM internet_shop.items")) {
@@ -112,7 +108,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                 }
             }
         } catch (SQLException e) {
-            logger.info("Can't show items " + e);
+            throw new DataProcessingException("Can't show items " + e);
         }
         return items;
     }

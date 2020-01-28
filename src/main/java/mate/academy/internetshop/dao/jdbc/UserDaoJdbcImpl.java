@@ -12,14 +12,13 @@ import java.util.Optional;
 import java.util.Set;
 
 import mate.academy.internetshop.dao.UserDao;
+import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
-import org.apache.log4j.Logger;
 
 @Dao
 public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
-    private static Logger logger = Logger.getLogger(UserDaoJdbcImpl.class);
     private static String DB_NAME_USERS = "internet_shop.users";
     private static String DB_NAME_USER_ROLES = "internet_shop.user_roles";
 
@@ -28,7 +27,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    public User create(User user) {
+    public User create(User user) throws DataProcessingException {
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement("INSERT INTO " + DB_NAME_USERS
                              + " (first_name, last_name, login, password, token)"
@@ -51,13 +50,13 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                 prStatementRole.executeUpdate();
             }
         } catch (SQLException e) {
-            logger.warn("User wasn't created " + e);
+            throw new DataProcessingException("User wasn't created " + e);
         }
         return user;
     }
 
     @Override
-    public Optional<User> get(Long id) {
+    public Optional<User> get(Long id) throws DataProcessingException {
         User user = new User();
         Set<Role> roles = new HashSet<>();
         try (PreparedStatement preparedStatement =
@@ -84,13 +83,12 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                 return Optional.of(user);
             }
         } catch (SQLException e) {
-            logger.info("Can't find user with id " + id, e);
+            throw new DataProcessingException("Can't find user with id " + id + e);
         }
-        return Optional.empty();
     }
 
     @Override
-    public User update(User user) {
+    public User update(User user) throws DataProcessingException {
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(
                              "UPDATE internet_shop.users SET"
@@ -106,31 +104,30 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             preparedStatement.setString(5, user.getToken());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.info("User wasn't updated ", e);
+            throw new DataProcessingException("User wasn't updated " + e);
         }
         return user;
     }
 
     @Override
-    public boolean deleteById(Long id) {
+    public boolean deleteById(Long id) throws DataProcessingException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 "DELETE FROM internet_shop.users WHERE user_id = ?")) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            logger.info("Can't delete user with id " + id, e);
+            throw new DataProcessingException("Can't delete user with id " + id + e);
         }
-        return false;
     }
 
     @Override
-    public boolean deleteByEntity(User user) {
+    public boolean deleteByEntity(User user) throws DataProcessingException {
         return deleteById(user.getUserId());
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll() throws DataProcessingException {
         List<User> users = new ArrayList<>();
         try (PreparedStatement prSt = connection.prepareStatement("SELECT * FROM users")) {
             try (ResultSet resultSet = prSt.executeQuery()) {
@@ -146,13 +143,13 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                 }
             }
         } catch (SQLException e) {
-            logger.info("Can't get all users ", e);
+            throw new DataProcessingException("Can't get all users " + e);
         }
         return users;
     }
 
     @Override
-    public Optional<User> findByLogin(String login) {
+    public Optional<User> findByLogin(String login) throws DataProcessingException {
         User user = new User();
         Set<Role> roles = new HashSet<>();
         try (PreparedStatement preparedStatement =
@@ -179,13 +176,12 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                 return Optional.of(user);
             }
         } catch (SQLException e) {
-            logger.info("Can't find user with login " + login, e);
+            throw new DataProcessingException("Can't find user with login " + login + e);
         }
-        return Optional.empty();
     }
 
     @Override
-    public Optional<User> findByToken(String token) {
+    public Optional<User> findByToken(String token) throws DataProcessingException {
         User user = new User();
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(
@@ -204,8 +200,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                 return Optional.of(user);
             }
         } catch (SQLException e) {
-            logger.info("Can't find user with token " + token, e);
+            throw new DataProcessingException("Can't find user with token " + token + e);
         }
-        return Optional.empty();
     }
 }
