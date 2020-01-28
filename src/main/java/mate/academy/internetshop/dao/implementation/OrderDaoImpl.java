@@ -32,7 +32,6 @@ public class OrderDaoImpl implements OrderDao {
                 .filter(updateOrder -> updateOrder.getOrderId().equals(order.getOrderId()))
                 .findFirst()
                 .map(updateOrder -> {
-                    updateOrder.setDate(order.getDate());
                     updateOrder.setUserId(order.getUserId());
                     updateOrder.setItems(order.getItems());
                     return updateOrder;

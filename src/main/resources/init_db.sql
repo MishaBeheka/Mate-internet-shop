@@ -94,3 +94,41 @@ CREATE TABLE `internet_shop`.`bucket_items` (
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8
     COLLATE = utf8_bin;
+
+CREATE TABLE `internet_shop`.`orders` (
+                                          `order_id` INT NOT NULL AUTO_INCREMENT,
+                                          `user_id` INT NOT NULL,
+                                          PRIMARY KEY (`order_id`),
+                                          INDEX `order to user_idx` (`user_id` ASC) VISIBLE,
+                                          CONSTRAINT `order to user`
+                                              FOREIGN KEY (`user_id`)
+                                                  REFERENCES `internet_shop`.`users` (`user_id`)
+                                                  ON DELETE NO ACTION
+                                                  ON UPDATE NO ACTION)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8
+    COLLATE = utf8_bin;
+
+CREATE TABLE `internet_shop`.`oders_items` (
+                                               `orders_items_id` INT NOT NULL AUTO_INCREMENT,
+                                               `item_id` INT NOT NULL,
+                                               `order_id` INT NOT NULL,
+                                               PRIMARY KEY (`orders_items_id`),
+                                               INDEX `orders_items to order_idx` (`order_id` ASC) VISIBLE,
+                                               INDEX `to items_idx` (`item_id` ASC) VISIBLE,
+                                               CONSTRAINT `orders_items to order`
+                                                   FOREIGN KEY (`order_id`)
+                                                       REFERENCES `internet_shop`.`orders` (`order_id`)
+                                                       ON DELETE NO ACTION
+                                                       ON UPDATE NO ACTION,
+                                               CONSTRAINT `to items`
+                                                   FOREIGN KEY (`item_id`)
+                                                       REFERENCES `internet_shop`.`items` (`item_id`)
+                                                       ON DELETE NO ACTION
+                                                       ON UPDATE NO ACTION)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8
+    COLLATE = utf8_bin;
+
+ALTER TABLE `internet_shop`.`oders_items`
+    RENAME TO  `internet_shop`.`orders_items` ;
