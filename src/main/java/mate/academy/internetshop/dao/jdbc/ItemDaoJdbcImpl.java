@@ -16,16 +16,18 @@ import mate.academy.internetshop.model.Item;
 
 @Dao
 public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
+    private static final String UPDATE_ITEM =
+            "UPDATE internet_shop.items SET name = ?, price = ? WHERE item_id = ?";
+
     public ItemDaoJdbcImpl(Connection connection) {
         super(connection);
     }
 
     @Override
     public Item create(Item item) throws DataProcessingException {
-        try (PreparedStatement pr =
-                     connection.prepareStatement(
-                             "INSERT INTO internet_shop.items (name, price) VALUES (?, ?)",
-                             Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement pr = connection.prepareStatement(
+                "INSERT INTO internet_shop.items (name, price) VALUES (?, ?)",
+                Statement.RETURN_GENERATED_KEYS)) {
             pr.setString(1, item.getName());
             pr.setDouble(2, item.getPrice());
             pr.executeUpdate();
@@ -42,9 +44,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     @Override
     public Optional<Item> get(Long id) throws DataProcessingException {
         Item item = new Item();
-        try (PreparedStatement ps =
-                     connection.prepareStatement(
-                             "SELECT * FROM internet_shop.items WHERE item_id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM internet_shop.items WHERE item_id = ?")) {
             ps.setLong(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
                 while (resultSet.next()) {
@@ -62,9 +63,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     @Override
     public Item update(Item item) throws DataProcessingException {
         try (PreparedStatement ps =
-                     connection.prepareStatement(
-                             "UPDATE internet_shop.items SET name = ?,"
-                                     + " price = ? WHERE item_id = ?")) {
+                     connection.prepareStatement(UPDATE_ITEM)) {
             ps.setString(1, item.getName());
             ps.setDouble(2, item.getPrice());
             ps.setLong(3, item.getItemId());
@@ -77,9 +76,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public boolean deleteById(Long id) throws DataProcessingException {
-        try (PreparedStatement pr =
-                     connection.prepareStatement(
-                             "DELETE FROM internet_shop.items WHERE item_id = ?")) {
+        try (PreparedStatement pr = connection.prepareStatement(
+                "DELETE FROM internet_shop.items WHERE item_id = ?")) {
             pr.setLong(1, id);
             pr.executeUpdate();
             return true;
@@ -96,8 +94,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     @Override
     public List<Item> getAll() throws DataProcessingException {
         List<Item> items = new ArrayList<>();
-        try (PreparedStatement pr =
-                     connection.prepareStatement("SELECT * FROM internet_shop.items")) {
+        try (PreparedStatement pr = connection.prepareStatement(
+                "SELECT * FROM internet_shop.items")) {
             try (ResultSet resultSet = pr.executeQuery()) {
                 while (resultSet.next()) {
                     Item item = new Item();

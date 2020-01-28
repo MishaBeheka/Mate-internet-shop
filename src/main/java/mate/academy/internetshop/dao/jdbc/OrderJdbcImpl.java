@@ -29,10 +29,9 @@ public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
 
     @Override
     public Order create(Order order) throws DataProcessingException {
-        try (PreparedStatement ps =
-                     connection.prepareStatement(
-                             "INSERT INTO orders (user_id) VALUES (?)",
-                             Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "INSERT INTO orders (user_id) VALUES (?)",
+                Statement.RETURN_GENERATED_KEYS)) {
             ps.setLong(1, order.getUserId());
             ps.executeUpdate();
             ResultSet resultSet = ps.getGeneratedKeys();
