@@ -60,33 +60,21 @@ public class BucketServiceImpl implements BucketService {
 
     @Override
     public void deleteItem(Bucket bucket, Item item) throws DataProcessingException {
-        bucketDao.getAll()
-                .stream()
-                .filter(neededBucket -> neededBucket.equals(bucket))
-                .findFirst()
-                .map(neededBucket -> neededBucket.getItems().remove(item));
-
+        Bucket upBucket = bucketDao.get(bucket.getBucketId()).get();
+        List<Item> itemsBucket = upBucket.getItems();
+        itemsBucket.remove(item);
+        bucketDao.update(upBucket);
     }
 
     @Override
     public void clear(Bucket bucket) throws DataProcessingException {
-        bucketDao.getAll()
-                .stream()
-                .filter(bucket1 -> bucket1.equals(bucket))
-                .findFirst()
-                .map(b -> {
-                    b.getItems().clear();
-                    return b;
-                });
+        Bucket bufferBucket = bucketDao.get(bucket.getBucketId()).get();
+        bufferBucket.getItems().clear();
+        bucketDao.update(bufferBucket);
     }
 
     @Override
     public List<Item> getAllItems(Bucket bucket) throws DataProcessingException {
-        return bucketDao.getAll()
-                .stream()
-                .filter(bucket1 -> bucket1.equals(bucket))
-                .map(Bucket::getItems)
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
+        return bucketDao.get(bucket.getBucketId()).get().getItems();
     }
 }

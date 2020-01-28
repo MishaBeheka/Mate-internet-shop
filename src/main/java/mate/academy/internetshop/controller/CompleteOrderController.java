@@ -36,6 +36,7 @@ public class CompleteOrderController extends HttpServlet {
             List<Item> items = bucket.getItems();
             User user = userService.get(userId);
             orderService.completeOrder(items, user);
+            bucketService.clear(bucket);
         } catch (DataProcessingException e) {
             logger.error(e);
             req.setAttribute("error_msg", e.getMessage());
