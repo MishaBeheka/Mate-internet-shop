@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 @Dao
 public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     private static Logger logger = Logger.getLogger(ItemDaoJdbcImpl.class);
+
     public ItemDaoJdbcImpl(Connection connection) {
         super(connection);
     }
@@ -44,7 +45,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     public Optional<Item> get(Long id) {
         Item item = new Item();
         try (PreparedStatement ps =
-                     connection.prepareStatement("SELECT * FROM internet_shop.items WHERE item_id = ?")) {
+                     connection.prepareStatement(
+                             "SELECT * FROM internet_shop.items WHERE item_id = ?")) {
             ps.setLong(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
                 while (resultSet.next()) {
@@ -64,7 +66,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     public Item update(Item item) {
         try (PreparedStatement ps =
                      connection.prepareStatement(
-                             "UPDATE internet_shop.items SET name = ?, price = ? WHERE item_id = ?")) {
+                             "UPDATE internet_shop.items SET name = ?,"
+                                     + " price = ? WHERE item_id = ?")) {
             ps.setString(1, item.getName());
             ps.setDouble(2, item.getPrice());
             ps.setLong(3, item.getItemId());
@@ -78,7 +81,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     @Override
     public boolean deleteById(Long id) {
         try (PreparedStatement pr =
-                     connection.prepareStatement("DELETE FROM internet_shop.items WHERE item_id = ?")) {
+                     connection.prepareStatement(
+                             "DELETE FROM internet_shop.items WHERE item_id = ?")) {
             pr.setLong(1, id);
             pr.executeUpdate();
             return true;

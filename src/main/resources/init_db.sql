@@ -61,3 +61,36 @@ CREATE TABLE `internet_shop`.`user_roles` (
     COLLATE = utf8_bin;
 
 INSERT INTO `internet_shop`.`user_roles` (`user_id`, `role_id`) VALUES ('1', '2');
+
+
+CREATE TABLE `internet_shop`.`bucket` (
+                                          `bucket_id` INT NOT NULL AUTO_INCREMENT,
+                                          `user_id` INT NOT NULL,
+                                          PRIMARY KEY (`bucket_id`))
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8
+    COLLATE = utf8_bin;
+
+ALTER TABLE `internet_shop`.`bucket`
+    RENAME TO  `internet_shop`.`buckets` ;
+
+CREATE TABLE `internet_shop`.`bucket_items` (
+                                                `bucket_items_id` INT NOT NULL AUTO_INCREMENT,
+                                                `bucket_id` INT NULL,
+                                                `item_id` INT NULL,
+                                                PRIMARY KEY (`bucket_items_id`),
+                                                INDEX `bucket_items_id  to bucket_id_idx` (`bucket_id` ASC) VISIBLE,
+                                                INDEX `bucket_items_user_id to item_id_idx` (`item_id` ASC) VISIBLE,
+                                                CONSTRAINT `bucket_items_id  to bucket_id`
+                                                    FOREIGN KEY (`bucket_id`)
+                                                        REFERENCES `internet_shop`.`bucket` (`bucket_id`)
+                                                        ON DELETE NO ACTION
+                                                        ON UPDATE NO ACTION,
+                                                CONSTRAINT `bucket_items_user_id to item_id`
+                                                    FOREIGN KEY (`item_id`)
+                                                        REFERENCES `internet_shop`.`items` (`item_id`)
+                                                        ON DELETE NO ACTION
+                                                        ON UPDATE NO ACTION)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8
+    COLLATE = utf8_bin;

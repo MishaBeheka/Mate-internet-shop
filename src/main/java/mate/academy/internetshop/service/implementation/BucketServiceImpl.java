@@ -52,11 +52,8 @@ public class BucketServiceImpl implements BucketService {
 
     @Override
     public void addItem(Bucket bucket, Item item) {
-        bucketDao.getAll()
-                .stream()
-                .filter(elementOfBucket -> elementOfBucket.equals(bucket))
-                .findFirst()
-                .map(neededBucket -> neededBucket.getItems().add(item));
+        bucket.getItems().add(item);
+        update(bucket);
 
     }
 
