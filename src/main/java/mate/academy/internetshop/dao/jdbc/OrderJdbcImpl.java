@@ -29,8 +29,8 @@ public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
 
     @Override
     public Order create(Order order) throws DataProcessingException {
-        try (PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO orders (user_id) VALUES (?)",
+        String query = "INSERT INTO orders (user_id) VALUES (?)";
+        try (PreparedStatement ps = connection.prepareStatement(query,
                 Statement.RETURN_GENERATED_KEYS)) {
             ps.setLong(1, order.getUserId());
             ps.executeUpdate();
@@ -47,8 +47,8 @@ public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
 
     @Override
     public Optional<Order> get(Long id) throws DataProcessingException {
-        try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT * FROM orders WHERE orders.order_id = ?")) {
+        String query = "SELECT * FROM orders WHERE orders.order_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setLong(1, id);
             ResultSet resultSet = ps.executeQuery();
             Order order = new Order();
@@ -65,8 +65,8 @@ public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
 
     @Override
     public Order update(Order order) throws DataProcessingException {
-        try (PreparedStatement ps = connection.prepareStatement(
-                "UPDATE orders SET order_id = ? WHERE user_id = ?")) {
+        String query = "UPDATE orders SET order_id = ? WHERE user_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setLong(1, order.getOrderId());
             ps.setLong(2, order.getUserId());
             ps.executeUpdate();
@@ -79,8 +79,8 @@ public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
 
     @Override
     public boolean deleteById(Long id) throws DataProcessingException {
-        try (PreparedStatement ps = connection.prepareStatement(
-                "DELETE FROM orders WHERE order_id = ?")) {
+        String query = "DELETE FROM orders WHERE order_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setLong(1, id);
             ps.executeUpdate();
             return true;
@@ -97,8 +97,8 @@ public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
     @Override
     public List<Order> getAll() throws DataProcessingException {
         List<Order> orders = new ArrayList<>();
-        try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT * FROM orders")) {
+        String query = "SELECT * FROM orders";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 Order order = get(resultSet.getLong("order_id")).orElseThrow();
@@ -111,8 +111,8 @@ public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
     }
 
     private void addItemsToDB(Order order) {
-        try (PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO orders_items (item_id, order_id) VALUES (?, ?)")) {
+        String query = "INSERT INTO orders_items (item_id, order_id) VALUES (?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setLong(2, order.getOrderId());
             for (Item item : order.getItems()) {
                 ps.setLong(1, item.getItemId());

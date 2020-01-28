@@ -51,6 +51,10 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             "SELECT user_id, first_name, last_name, login, password, token "
                     + "FROM users WHERE token = ?";
 
+    private static final String ADD_USER_ROLES =
+            "INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)";
+
+
     public UserDaoJdbcImpl(Connection connection) {
         super(connection);
     }
@@ -59,13 +63,13 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     public User create(User user) throws DataProcessingException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
-            generatePS(preparedStatement, user).executeUpdate();
+            generatePreparedStatement(preparedStatement, user).executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 user.setUserId(resultSet.getLong(1));
             }
-            try (PreparedStatement prStatementRole = connection.prepareStatement(
-                    "INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)")) {
+            try (PreparedStatement prStatementRole =
+                         connection.prepareStatement(ADD_USER_ROLES)) {
                 prStatementRole.setLong(1, user.getUserId());
                 prStatementRole.setLong(2, 1);
                 prStatementRole.executeUpdate();
@@ -100,7 +104,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     public User update(User user) throws DataProcessingException {
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(UPDATE_USER)) {
-            generatePS(preparedStatement, user);
+            generatePreparedStatement(preparedStatement, user);
             preparedStatement.setLong(6, user.getUserId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -111,8 +115,8 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public boolean deleteById(Long id) throws DataProcessingException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "DELETE FROM internet_shop.users WHERE user_id = ?")) {
+        String query = "DELETE FROM internet_shop.users WHERE user_id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
             return true;
@@ -129,7 +133,8 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     @Override
     public List<User> getAll() throws DataProcessingException {
         List<User> users = new ArrayList<>();
-        try (PreparedStatement prSt = connection.prepareStatement("SELECT * FROM users")) {
+        String query = "SELECT * FROM users";
+        try (PreparedStatement prSt = connection.prepareStatement(query)) {
             try (ResultSet resultSet = prSt.executeQuery()) {
                 while (resultSet.next()) {
                     User user = new User();
@@ -179,7 +184,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         }
     }
 
-    private PreparedStatement generatePS(PreparedStatement ps, User user)
+    private PreparedStatement generatePreparedStatement(PreparedStatement ps, User user)
             throws SQLException {
         ps.setString(1, user.getFirstName());
         ps.setString(2, user.getLastName());

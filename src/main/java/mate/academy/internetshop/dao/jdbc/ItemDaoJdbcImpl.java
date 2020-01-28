@@ -25,8 +25,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public Item create(Item item) throws DataProcessingException {
-        try (PreparedStatement pr = connection.prepareStatement(
-                "INSERT INTO internet_shop.items (name, price) VALUES (?, ?)",
+        String query = "INSERT INTO internet_shop.items (name, price) VALUES (?, ?)";
+        try (PreparedStatement pr = connection.prepareStatement(query,
                 Statement.RETURN_GENERATED_KEYS)) {
             pr.setString(1, item.getName());
             pr.setDouble(2, item.getPrice());
@@ -43,9 +43,9 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public Optional<Item> get(Long id) throws DataProcessingException {
+        String query = "SELECT * FROM internet_shop.items WHERE item_id = ?";
         Item item = new Item();
-        try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT * FROM internet_shop.items WHERE item_id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setLong(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
                 while (resultSet.next()) {
@@ -74,8 +74,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public boolean deleteById(Long id) throws DataProcessingException {
-        try (PreparedStatement pr = connection.prepareStatement(
-                "DELETE FROM internet_shop.items WHERE item_id = ?")) {
+        String query = "DELETE FROM internet_shop.items WHERE item_id = ?";
+        try (PreparedStatement pr = connection.prepareStatement(query)) {
             pr.setLong(1, id);
             pr.executeUpdate();
             return true;
@@ -91,9 +91,9 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public List<Item> getAll() throws DataProcessingException {
+        String query = "SELECT * FROM internet_shop.items";
         List<Item> items = new ArrayList<>();
-        try (PreparedStatement pr = connection.prepareStatement(
-                "SELECT * FROM internet_shop.items")) {
+        try (PreparedStatement pr = connection.prepareStatement(query)) {
             try (ResultSet resultSet = pr.executeQuery()) {
                 while (resultSet.next()) {
                     Item item = new Item();
