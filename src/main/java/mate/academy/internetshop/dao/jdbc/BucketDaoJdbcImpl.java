@@ -18,11 +18,13 @@ import org.apache.log4j.Logger;
 @Dao
 public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao {
     private static Logger logger = Logger.getLogger(BucketDaoJdbcImpl.class);
-    private static final String GET_ALL_ITEMS = "SELECT internet_shop.items.item_id, "
-            + "internet_shop.items.name, internet_shop.items.price "
-            + "FROM internet_shop.items INNER JOIN internet_shop.bucket_items "
-            + "ON internet_shop.items.item_id = internet_shop.bucket_items.item_id "
-            + "WHERE internet_shop.bucket_items.bucket_id = ?";
+    private static final String GET_ALL_ITEMS = "SELECT items.item_id, "
+            + "items.name, items.price "
+            + "FROM items INNER JOIN bucket_items "
+            + "ON items.item_id = bucket_items.item_id "
+            + "WHERE bucket_items.bucket_id = ?";
+    private static final String ADD_ITEMS_TO_BUCKET =
+            "INSERT INTO bucket_items (bucket_id, item_id) VALUES (?, ?)";
 
     public BucketDaoJdbcImpl(Connection connection) {
         super(connection);
@@ -32,7 +34,7 @@ public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao 
     public Bucket create(Bucket bucket) {
         try (PreparedStatement ps =
                      connection.prepareStatement(
-                             "INSERT INTO internet_shop.buckets (user_id) VALUES (?)",
+                             "INSERT INTO buckets (user_id) VALUES (?)",
                              Statement.RETURN_GENERATED_KEYS)) {
             ps.setLong(1, bucket.getUserId());
             ps.executeUpdate();
@@ -50,7 +52,7 @@ public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao 
     public Optional<Bucket> get(Long id) {
         try (PreparedStatement ps =
                      connection.prepareStatement(
-                             "SELECT * FROM internet_shop.buckets WHERE bucket_id = ?")) {
+                             "SELECT * FROM buckets WHERE bucket_id = ?")) {
             ps.setLong(1, id);
             ResultSet resultSet = ps.executeQuery();
             Bucket bucket = new Bucket();
@@ -160,8 +162,7 @@ public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao 
     private Bucket addItemsToBucket(Bucket bucket) {
         for (Item item : bucket.getItems()) {
             try (PreparedStatement ps =
-                         connection.prepareStatement(
-                                 "INSERT INTO internet_shop.bucket_items (bucket_id, item_id) VALUES (?, ?)")) {
+                         connection.prepareStatement(ADD_ITEMS_TO_BUCKET)) {
                 ps.setLong(1, bucket.getBucketId());
                 ps.setLong(2, item.getItemId());
             } catch (SQLException e) {

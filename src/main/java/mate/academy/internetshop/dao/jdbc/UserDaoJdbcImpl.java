@@ -132,7 +132,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
-        try (PreparedStatement prSt = connection.prepareStatement("SELECT * FROM internet_shop.users")) {
+        try (PreparedStatement prSt = connection.prepareStatement("SELECT * FROM users")) {
             try (ResultSet resultSet = prSt.executeQuery()) {
                 while (resultSet.next()) {
                     User user = new User();
@@ -157,12 +157,12 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         Set<Role> roles = new HashSet<>();
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(
-                             "SELECT * FROM internet_shop.users "
-                                     + "INNER JOIN internet_shop.user_roles "
+                             "SELECT * FROM users "
+                                     + "INNER JOIN user_roles "
                                      + "ON users.user_id = user_roles.user_id "
-                                     + "INNER JOIN internet_shop.role "
+                                     + "INNER JOIN role "
                                      + "using (role_id) "
-                                     + "WHERE internet_shop.users.login = ?")) {
+                                     + "WHERE users.login = ?")) {
             preparedStatement.setString(1, login);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
