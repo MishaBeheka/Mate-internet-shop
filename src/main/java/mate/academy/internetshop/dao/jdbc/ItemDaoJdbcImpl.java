@@ -49,9 +49,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
             ps.setLong(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
                 while (resultSet.next()) {
-                    item.setItemId(resultSet.getLong("item_id"));
-                    item.setName(resultSet.getString("name"));
-                    item.setPrice(resultSet.getDouble("price"));
+                    generateItem(resultSet, item);
                 }
                 return Optional.of(item);
             }
@@ -99,9 +97,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
             try (ResultSet resultSet = pr.executeQuery()) {
                 while (resultSet.next()) {
                     Item item = new Item();
-                    item.setItemId(resultSet.getLong("item_id"));
-                    item.setName(resultSet.getString("name"));
-                    item.setPrice(resultSet.getDouble("price"));
+                    generateItem(resultSet, item);
                     items.add(item);
                 }
             }
@@ -109,5 +105,12 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
             throw new DataProcessingException("Can't show items " + e);
         }
         return items;
+    }
+
+    private Item generateItem(ResultSet resultSet, Item item) throws SQLException {
+        item.setItemId(resultSet.getLong("item_id"));
+        item.setName(resultSet.getString("name"));
+        item.setPrice(resultSet.getDouble("price"));
+        return item;
     }
 }
