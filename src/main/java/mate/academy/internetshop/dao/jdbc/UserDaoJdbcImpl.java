@@ -19,7 +19,6 @@ import mate.academy.internetshop.model.User;
 
 @Dao
 public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
-    private static final String DB_NAME_USERS = "internet_shop.users";
     private static final String CREATE_USER =
             "INSERT INTO users "
                     + "(first_name, last_name, login, password, token)"
@@ -60,12 +59,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     public User create(User user) throws DataProcessingException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getLastName());
-            preparedStatement.setString(3, user.getLogin());
-            preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setString(5, user.getToken());
-            preparedStatement.executeUpdate();
+            generatePS(preparedStatement, user).executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 user.setUserId(resultSet.getLong(1));
@@ -90,12 +84,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             ps.setLong(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
                 while (resultSet.next()) {
-                    user.setUserId(resultSet.getLong("user_id"));
-                    user.setFirstName(resultSet.getString("first_name"));
-                    user.setLastName(resultSet.getString("last_name"));
-                    user.setLogin(resultSet.getString("login"));
-                    user.setPassword(resultSet.getString("password"));
-                    user.setToken(resultSet.getString("token"));
+                    generateUser(resultSet, user);
                     Role role = Role.of(resultSet.getString("role_name"));
                     roles.add(role);
                 }
@@ -111,11 +100,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     public User update(User user) throws DataProcessingException {
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(UPDATE_USER)) {
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getLastName());
-            preparedStatement.setString(3, user.getLogin());
-            preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setString(5, user.getToken());
+            generatePS(preparedStatement, user);
             preparedStatement.setLong(6, user.getUserId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -148,12 +133,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             try (ResultSet resultSet = prSt.executeQuery()) {
                 while (resultSet.next()) {
                     User user = new User();
-                    user.setUserId(resultSet.getLong(1));
-                    user.setFirstName(resultSet.getString(2));
-                    user.setLastName(resultSet.getString(3));
-                    user.setLogin(resultSet.getString(4));
-                    user.setPassword(resultSet.getString(5));
-                    user.setToken(resultSet.getString(6));
+                    generateUser(resultSet, user);
                     users.add(user);
                 }
             }
@@ -171,12 +151,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             preparedStatement.setString(1, login);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    user.setUserId(resultSet.getLong("user_id"));
-                    user.setFirstName(resultSet.getString("first_name"));
-                    user.setLastName(resultSet.getString("last_name"));
-                    user.setLogin(resultSet.getString("login"));
-                    user.setPassword(resultSet.getString("password"));
-                    user.setToken(resultSet.getString("token"));
+                    generateUser(resultSet, user);
                     Role role = Role.of(resultSet.getString("role_name"));
                     roles.add(role);
                 }
@@ -195,17 +170,32 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             preparedStatement.setString(1, token);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    user.setUserId(resultSet.getLong(1));
-                    user.setFirstName(resultSet.getString(2));
-                    user.setLastName(resultSet.getString(3));
-                    user.setLogin(resultSet.getString(4));
-                    user.setPassword(resultSet.getString(5));
-                    user.setToken(resultSet.getString(6));
+                    generateUser(resultSet, user);
                 }
                 return Optional.of(user);
             }
         } catch (SQLException e) {
             throw new DataProcessingException("Can't find user with token " + token + e);
         }
+    }
+
+    private PreparedStatement generatePS(PreparedStatement ps, User user)
+            throws SQLException {
+        ps.setString(1, user.getFirstName());
+        ps.setString(2, user.getLastName());
+        ps.setString(3, user.getLogin());
+        ps.setString(4, user.getPassword());
+        ps.setString(5, user.getToken());
+        return ps;
+    }
+
+    private User generateUser(ResultSet resultSet, User user) throws SQLException {
+        user.setUserId(resultSet.getLong("user_id"));
+        user.setFirstName(resultSet.getString("first_name"));
+        user.setLastName(resultSet.getString("last_name"));
+        user.setLogin(resultSet.getString("login"));
+        user.setPassword(resultSet.getString("password"));
+        user.setToken(resultSet.getString("token"));
+        return user;
     }
 }
