@@ -4,15 +4,19 @@ import java.util.List;
 import java.util.Objects;
 
 public class Bucket {
-    private static Long idGenerator = 0L;
     private Long bucketId;
     private List<Item> items;
     private Long userId;
 
+    public Bucket(){}
+
     public Bucket(List<Item> items, Long userId) {
-        this.bucketId = ++idGenerator;
         this.items = items;
         this.userId = userId;
+    }
+
+    public void setBucketId(Long bucketId) {
+        this.bucketId = bucketId;
     }
 
     public Long getBucketId() {

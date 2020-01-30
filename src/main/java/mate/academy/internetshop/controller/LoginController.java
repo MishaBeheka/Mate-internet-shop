@@ -9,11 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import mate.academy.internetshop.exceptions.AuthenticationException;
+import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.UserService;
+import org.apache.log4j.Logger;
 
 public class LoginController extends HttpServlet {
+    private static Logger logger = Logger.getLogger(LoginController.class);
 
     @Inject
     private static UserService userService;
@@ -30,8 +33,14 @@ public class LoginController extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("psw");
         try {
-            User user = userService.login(login, password);
-
+            User user = null;
+            try {
+                user = userService.login(login, password);
+            } catch (DataProcessingException e) {
+                logger.error(e);
+                req.setAttribute("error_msg", e.getMessage());
+                req.getRequestDispatcher("/WEB-INF/views/errorDB.jsp").forward(req, resp);
+            }
             HttpSession session = req.getSession(true);
             session.setAttribute("userId", user.getUserId());
 

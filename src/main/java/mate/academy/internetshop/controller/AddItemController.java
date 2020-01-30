@@ -6,11 +6,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.service.ItemService;
+import org.apache.log4j.Logger;
 
 public class AddItemController extends HttpServlet {
+    private static Logger logger = Logger.getLogger(AddItemController.class);
 
     @Inject
     private static ItemService itemService;
@@ -27,7 +30,13 @@ public class AddItemController extends HttpServlet {
         Item item = new Item();
         item.setName(req.getParameter("name_item"));
         item.setPrice(Double.parseDouble(req.getParameter("price")));
-        itemService.create(item);
+        try {
+            itemService.create(item);
+        } catch (DataProcessingException e) {
+            logger.error(e);
+            req.setAttribute("error_msg", e.getMessage());
+            req.getRequestDispatcher("/WEB-INF/views/errorDB.jsp").forward(req, resp);
+        }
         resp.sendRedirect(req.getContextPath() + "/servlet/addItem");
     }
 }

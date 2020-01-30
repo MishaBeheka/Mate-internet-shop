@@ -15,12 +15,15 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.UserService;
+import org.apache.log4j.Logger;
 
 public class AuthorizationFilter implements Filter {
+    private static Logger logger = Logger.getLogger(AuthorizationFilter.class);
     @Inject
     private static UserService userService;
     private Map<String, Role.RoleName> protectedUrls = new HashMap<>();
@@ -44,7 +47,12 @@ public class AuthorizationFilter implements Filter {
 
         Role.RoleName roleName = protectedUrls.get(req.getServletPath());
         Long userId = (Long) req.getSession().getAttribute("userId");
-        User user = userService.get(userId);
+        User user = null;
+        try {
+            user = userService.get(userId);
+        } catch (DataProcessingException e) {
+            logger.error(e);
+        }
 
         if (roleName != null && !verifyRole(user, roleName)) {
             processDenied(req, resp);
