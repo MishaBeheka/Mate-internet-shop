@@ -21,8 +21,8 @@ import mate.academy.internetshop.model.User;
 public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     private static final String CREATE_USER =
             "INSERT INTO users "
-                    + "(first_name, last_name, login, password, token)"
-                    + " VALUES (?, ?, ?, ?, ?)";
+                    + "(first_name, last_name, login, password, token, salt)"
+                    + " VALUES (?, ?, ?, ?, ?, ?)";
     private static final String GET_USER =
             "SELECT * FROM users "
                     + "INNER JOIN internet_shop.user_roles "
@@ -37,7 +37,9 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                     + " last_name = ?, "
                     + " login = ?,"
                     + " password = ?, "
-                    + " token = ? WHERE user_id = ?";
+                    + " token = ?, "
+                    + " salt = ? "
+                    + " WHERE user_id = ?";
 
     private static final String FIND_BY_LOGIN =
             "SELECT * FROM users "
@@ -48,12 +50,11 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                     + "WHERE users.login = ?";
 
     private static final String FIND_BY_TOKEN =
-            "SELECT user_id, first_name, last_name, login, password, token "
+            "SELECT user_id, first_name, last_name, login, password, token, salt "
                     + "FROM users WHERE token = ?";
 
     private static final String ADD_USER_ROLES =
             "INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)";
-
 
     public UserDaoJdbcImpl(Connection connection) {
         super(connection);
@@ -105,7 +106,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         try (PreparedStatement preparedStatement =
                      connection.prepareStatement(UPDATE_USER)) {
             generatePreparedStatement(preparedStatement, user);
-            preparedStatement.setLong(6, user.getUserId());
+            preparedStatement.setLong(7, user.getUserId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DataProcessingException("User wasn't updated " + e);
@@ -191,6 +192,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         ps.setString(3, user.getLogin());
         ps.setString(4, user.getPassword());
         ps.setString(5, user.getToken());
+        ps.setBytes(6, user.getSalt());
         return ps;
     }
 
@@ -201,6 +203,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         user.setLogin(resultSet.getString("login"));
         user.setPassword(resultSet.getString("password"));
         user.setToken(resultSet.getString("token"));
+        user.setSalt(resultSet.getBytes("salt"));
         return user;
     }
 }
