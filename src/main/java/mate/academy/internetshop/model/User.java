@@ -1,5 +1,6 @@
 package mate.academy.internetshop.model;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -12,8 +13,10 @@ public class User {
     private String password;
     private String token;
     private Set<Role> roles = new HashSet<>();
+    private byte[] salt;
 
-    public User() {}
+    public User() {
+    }
 
     public User(Long userId, String firstName, String lastName, String login, String password) {
 
@@ -22,6 +25,14 @@ public class User {
         this.lastName = lastName;
         this.login = login;
         this.password = password;
+    }
+
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
     }
 
     public void setUserId(Long userId) {
@@ -98,7 +109,8 @@ public class User {
                 && Objects.equals(lastName, user.lastName)
                 && Objects.equals(login, user.login)
                 && Objects.equals(password, user.password)
-                && Objects.equals(token, user.token);
+                && Objects.equals(token, user.token)
+                && Arrays.equals(salt, user.salt);
     }
 
     @Override
