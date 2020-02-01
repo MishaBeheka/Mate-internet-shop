@@ -93,9 +93,7 @@ public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao 
 
     @Override
     public boolean deleteById(Long id) throws DataProcessingException {
-        clear(id, DELETE_ITEMS_BY_BUCKET_ID);
-        clear(id, DELETE_BUCKET_BY_ID);
-        return true;
+        return clear(id, DELETE_ITEMS_BY_BUCKET_ID) && clear(id, DELETE_BUCKET_BY_ID);
     }
 
     @Override
@@ -134,10 +132,11 @@ public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao 
         return Optional.empty();
     }
 
-    private void clear(Long id, String query) throws DataProcessingException {
+    private boolean clear(Long id, String query) throws DataProcessingException {
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setLong(1, id);
             ps.executeUpdate();
+            return true;
         } catch (SQLException e) {
             throw new DataProcessingException(
                     "Can't execute action with QUERY " + query + " and ID " + id + e);
