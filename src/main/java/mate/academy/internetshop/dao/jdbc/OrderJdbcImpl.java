@@ -17,6 +17,20 @@ import mate.academy.internetshop.model.Order;
 
 @Dao
 public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
+    private static final String CREATE_ORDER =
+            "INSERT INTO orders (user_id) VALUES (?)";
+
+    private static final String GET_ORDER_BY_ID =
+            "SELECT * FROM orders WHERE orders.order_id = ?";
+
+    private static final String UPDATE_ORDER =
+            "UPDATE orders SET order_id = ? WHERE user_id = ?";
+
+    private static final String DELETE_ORDER_BY_ID =
+            "DELETE FROM orders WHERE order_id = ?";
+
+    private static final String ADD_ITEMS_TO_ORDER =
+            "INSERT INTO orders_items (item_id, order_id) VALUES (?, ?)";
 
     private static final String GET_ALL_ITEMS =
             "SELECT items.item_id, items.name, items.price FROM items"
@@ -29,9 +43,8 @@ public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
 
     @Override
     public Order create(Order order) throws DataProcessingException {
-        String query = "INSERT INTO orders (user_id) VALUES (?)";
-        try (PreparedStatement ps = connection.prepareStatement(query,
-                Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = connection.prepareStatement(
+                CREATE_ORDER, Statement.RETURN_GENERATED_KEYS)) {
             ps.setLong(1, order.getUserId());
             ps.executeUpdate();
             ResultSet resultSet = ps.getGeneratedKeys();
@@ -41,14 +54,13 @@ public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
         } catch (SQLException e) {
             throw new DataProcessingException("Can't create order " + e);
         }
-        addItemsToDB(order);
+        addItemsToOrder(order);
         return order;
     }
 
     @Override
     public Optional<Order> get(Long id) throws DataProcessingException {
-        String query = "SELECT * FROM orders WHERE orders.order_id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+        try (PreparedStatement ps = connection.prepareStatement(GET_ORDER_BY_ID)) {
             ps.setLong(1, id);
             ResultSet resultSet = ps.executeQuery();
             Order order = new Order();
@@ -65,8 +77,7 @@ public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
 
     @Override
     public Order update(Order order) throws DataProcessingException {
-        String query = "UPDATE orders SET order_id = ? WHERE user_id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+        try (PreparedStatement ps = connection.prepareStatement(UPDATE_ORDER)) {
             ps.setLong(1, order.getOrderId());
             ps.setLong(2, order.getUserId());
             ps.executeUpdate();
@@ -79,8 +90,7 @@ public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
 
     @Override
     public boolean deleteById(Long id) throws DataProcessingException {
-        String query = "DELETE FROM orders WHERE order_id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+        try (PreparedStatement ps = connection.prepareStatement(DELETE_ORDER_BY_ID)) {
             ps.setLong(1, id);
             ps.executeUpdate();
             return true;
@@ -110,16 +120,16 @@ public class OrderJdbcImpl extends AbstractDao<Order> implements OrderDao {
         return orders;
     }
 
-    private void addItemsToDB(Order order) {
-        String query = "INSERT INTO orders_items (item_id, order_id) VALUES (?, ?)";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+    private void addItemsToOrder(Order order) throws DataProcessingException {
+        try (PreparedStatement ps = connection.prepareStatement(ADD_ITEMS_TO_ORDER)) {
             ps.setLong(2, order.getOrderId());
             for (Item item : order.getItems()) {
                 ps.setLong(1, item.getItemId());
-                ps.execute();
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
-            e.getErrorCode();
+            throw new DataProcessingException("Can't add order with ID "
+                    + order.getOrderId() + e);
         }
     }
 
