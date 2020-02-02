@@ -156,16 +156,12 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     private Optional<User> findUserBySpecialParam(String searchParam, String query)
             throws DataProcessingException {
         User user = new User();
-//        Set<Role> roles = new HashSet<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, searchParam);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 generateUser(resultSet, user);
-//                Role role = Role.of(resultSet.getString("role_name"));
-//                roles.add(role);
             }
-//            user.setRoles(roles);
             return Optional.of(user);
         } catch (SQLException e) {
             throw new DataProcessingException("Can't find user with search param "

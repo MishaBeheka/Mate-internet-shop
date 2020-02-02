@@ -1,17 +1,37 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <html>
 <head>
     <title>Index</title>
 </head>
 <body>
-<p><a href="getAllUsers">Show users</a></p>
-<p><a href="addItem">Add item to shop</a></p>
-<p><a href="getAllItems">Show items in the shop</a></p>
-<p><a href="bucket">Show Bucket</a></p>
-<p><a href="orders">Show Orders</a></p>
-<p><a href="${pageContext.request.contextPath}/login">Login</a></p>
-<p><a href="${pageContext.request.contextPath}/logout">Logout</a></p>
+<div class="jumbotron text-center" style="margin-bottom:0">
+    <h1>It is a simple model web-store</h1>
+    <p>I wish you good shopping;)</p>
+</div>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<%--    <a class="navbar-brand" href="index">STORE</a>--%>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="getAllUsers"> LIST OF USERS </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="addItem"> ADD ITEMS IN THE SHOP </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="getAllItems"> SHOW ITEMS IN THE SHOP </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="bucket"> BUCKET </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="orders"> MY ORDERS </a>
+            </li>
+        </ul>
+    </div>
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/logout">LOGOUT</a>
+</nav>
 </body>
 </html>

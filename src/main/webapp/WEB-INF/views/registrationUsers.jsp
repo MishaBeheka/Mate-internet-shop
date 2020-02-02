@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <html>
 <head>
     <title>Registration of User</title>
@@ -7,10 +7,9 @@
 <body>
     <form action="${pageContext.request.contextPath}/registrationUsers" method="post">
         <div class="container col-lg-4">
-            <h2>Register</h2>
-            <p>Please fill in this form to create an account.</p>
+            <h2 class="text-center">REGISTRATION</h2>
+            <p class="text-center">Please fill in this form to create an account.</p>
             <hr>
-
             <div class="form-group">
                 <label for="first_name"><b>First Name</b></label>
                 <input type="text" class="form-control" placeholder="Enter First Name" name="first_name" id="first_name" required>
@@ -42,7 +41,6 @@
                 <p>Already have an account? <a href="login">Sign in</a>.</p>
             </div>
         </div>
-
     </form>
 </body>
 </html>

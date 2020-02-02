@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <html>
 <head>
     <title>Login</title>
@@ -9,8 +8,8 @@
 <div>${errorMsg}</div>
 <form action="${pageContext.request.contextPath}/login" method="post">
     <div class="container col-lg-4">
-        <h1>Login</h1>
-        <p>Please fill in this form to sign into account.</p>
+        <h1 class="text-center">LOGIN</h1>
+        <p class="text-center">Please fill in this form to sign into account.</p>
         <hr>
 
         <div class="form-group">
