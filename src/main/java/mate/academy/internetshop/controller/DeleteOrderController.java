@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.lib.Inject;
-import mate.academy.internetshop.service.ItemService;
 import mate.academy.internetshop.service.OrderService;
 import org.apache.log4j.Logger;
 
