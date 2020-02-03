@@ -16,7 +16,7 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class AddItemToBucketController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(AddItemToBucketController.class);
+    private static final Logger logger = Logger.getLogger(AddItemToBucketController.class);
     @Inject
     private static BucketService bucketService;
     @Inject

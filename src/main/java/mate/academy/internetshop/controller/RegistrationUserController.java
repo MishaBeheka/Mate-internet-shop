@@ -16,7 +16,7 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class RegistrationUserController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(RegistrationUserController.class);
+    private static final Logger logger = Logger.getLogger(RegistrationUserController.class);
 
     @Inject
     private static UserService userService;

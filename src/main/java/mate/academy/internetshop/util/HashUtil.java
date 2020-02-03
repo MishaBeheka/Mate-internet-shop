@@ -7,7 +7,7 @@ import java.security.SecureRandom;
 import org.apache.log4j.Logger;
 
 public class HashUtil {
-    private static Logger logger = Logger.getLogger(HashUtil.class);
+    private static final Logger logger = Logger.getLogger(HashUtil.class);
 
     public static byte[] getSalt() {
         SecureRandom secureRandom = new SecureRandom();

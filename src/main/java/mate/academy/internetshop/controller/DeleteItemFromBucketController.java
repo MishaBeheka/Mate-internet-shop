@@ -15,7 +15,7 @@ import mate.academy.internetshop.service.ItemService;
 import org.apache.log4j.Logger;
 
 public class DeleteItemFromBucketController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(DeleteItemFromBucketController.class);
+    private static final Logger logger = Logger.getLogger(DeleteItemFromBucketController.class);
 
     @Inject
     private static BucketService bucketService;

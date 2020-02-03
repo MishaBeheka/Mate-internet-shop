@@ -14,7 +14,7 @@ import mate.academy.internetshop.service.OrderService;
 import mate.academy.internetshop.service.UserService;
 
 public class AnnotatedClassMap {
-    private static final Map<Class, Object> classMap = new HashMap<>();
+    private static final Map<Class<?>, Object> classMap = new HashMap<>();
 
     static {
         classMap.put(UserDao.class, DaoFactory.getUserDao());
@@ -27,7 +27,7 @@ public class AnnotatedClassMap {
         classMap.put(BucketService.class, DaoFactory.getBucketService());
     }
 
-    public static Object getDaoImplementation(Class interfaceClass) {
+    public static Object getDaoImplementation(Class<?> interfaceClass) {
         return classMap.get(interfaceClass);
     }
 }

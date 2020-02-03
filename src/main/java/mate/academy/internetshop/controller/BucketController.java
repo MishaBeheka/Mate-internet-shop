@@ -13,7 +13,7 @@ import mate.academy.internetshop.service.BucketService;
 import org.apache.log4j.Logger;
 
 public class BucketController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(BucketController.class);
+    private static final Logger logger = Logger.getLogger(BucketController.class);
     @Inject
     private static BucketService bucketService;
 

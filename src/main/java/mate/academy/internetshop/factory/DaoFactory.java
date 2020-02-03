@@ -23,7 +23,7 @@ import mate.academy.internetshop.service.implementation.UserServiceImpl;
 import org.apache.log4j.Logger;
 
 public class DaoFactory {
-    private static Logger logger = Logger.getLogger(DaoFactory.class);
+    private static final Logger logger = Logger.getLogger(DaoFactory.class);
     private static UserDao userDao;
     private static BucketDao bucketDao;
     private static ItemDao itemDao;

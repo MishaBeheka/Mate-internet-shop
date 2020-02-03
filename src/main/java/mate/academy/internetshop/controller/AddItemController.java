@@ -13,7 +13,7 @@ import mate.academy.internetshop.service.ItemService;
 import org.apache.log4j.Logger;
 
 public class AddItemController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(AddItemController.class);
+    private static final Logger logger = Logger.getLogger(AddItemController.class);
 
     @Inject
     private static ItemService itemService;
