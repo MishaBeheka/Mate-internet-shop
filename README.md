@@ -38,7 +38,7 @@ It implements the basic features that should be available in a web-store:
   
   * Add sdk 11.0.3 in project.
   * Use file /jv-internet-shop/src/main/resources/init_db.sql to create schema and all the tables required by this app in MySQL database.
-  * At /jv-internet-shop/src/main/java/mate/academy/internetshop/factory/DaoFactory class use username and password for your DB to create a Connection.
+  * At /jv-internet-shop/src/main/java/mate/academy/internetshop/factory/Factory class use username and password for your DB to create a Connection.
   * Change a path in /jv-internet-shop/src/main/resources/log4j.properties. It has to reach your logFile.
   * Run the project
   <hr>

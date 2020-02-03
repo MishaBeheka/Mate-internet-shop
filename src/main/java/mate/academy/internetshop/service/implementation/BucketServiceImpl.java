@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import mate.academy.internetshop.dao.BucketDao;
-import mate.academy.internetshop.dao.ItemDao;
 import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.lib.Service;
@@ -18,8 +17,6 @@ import mate.academy.internetshop.service.BucketService;
 public class BucketServiceImpl implements BucketService {
     @Inject
     private static BucketDao bucketDao;
-    @Inject
-    private static ItemDao itemDao;
 
     @Override
     public Bucket create(Bucket bucket) throws DataProcessingException {

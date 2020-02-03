@@ -27,9 +27,8 @@ public class DeleteItemFromBucketController extends HttpServlet {
             throws ServletException, IOException {
         Long userId = (Long) req.getSession(true).getAttribute("userId");
         String itemId = req.getParameter("item_id");
-        Bucket bucket = null;
         try {
-            bucket = bucketService.getByUserId(userId);
+            Bucket bucket = bucketService.getByUserId(userId);
             Item item = itemService.get(Long.valueOf(itemId));
             bucketService.deleteItem(bucket, item);
         } catch (DataProcessingException e) {
