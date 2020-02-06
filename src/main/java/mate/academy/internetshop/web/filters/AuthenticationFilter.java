@@ -19,7 +19,7 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class AuthenticationFilter implements Filter {
-    private static final Logger logger = Logger.getLogger(AuthenticationFilter.class);
+    private static final Logger LOGGER = Logger.getLogger(AuthenticationFilter.class);
     @Inject
     private static UserService userService;
 
@@ -45,16 +45,16 @@ public class AuthenticationFilter implements Filter {
                 try {
                     user = userService.findByToken(cookie.getValue());
                 } catch (DataProcessingException e) {
-                    logger.error(e);
+                    LOGGER.error(e);
                 }
                 if (user.isPresent()) {
-                    logger.info("User " + user.get().getLogin() + " was authentication");
+                    LOGGER.info("User " + user.get().getLogin() + " was authentication");
                     chain.doFilter(servletRequest, servletResponse);
                     return;
                 }
             }
         }
-        logger.info("User wasn't was authentication");
+        LOGGER.info("User wasn't was authentication");
         processUnAuthenticated(req, resp);
 
     }

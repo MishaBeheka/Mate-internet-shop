@@ -13,7 +13,7 @@ import mate.academy.internetshop.service.BucketService;
 import org.apache.log4j.Logger;
 
 public class BucketController extends HttpServlet {
-    private static final Logger logger = Logger.getLogger(BucketController.class);
+    private static final Logger LOGGER = Logger.getLogger(BucketController.class);
     @Inject
     private static BucketService bucketService;
 
@@ -25,7 +25,7 @@ public class BucketController extends HttpServlet {
         try {
             bucket = bucketService.getByUserId(userId);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_msg", e.getMessage());
             req.getRequestDispatcher("/WEB-INF/views/errorDB.jsp").forward(req, resp);
         }

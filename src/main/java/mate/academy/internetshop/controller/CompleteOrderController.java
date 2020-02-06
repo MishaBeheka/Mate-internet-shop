@@ -18,7 +18,7 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class CompleteOrderController extends HttpServlet {
-    private static final Logger logger = Logger.getLogger(CompleteOrderController.class);
+    private static final Logger LOGGER = Logger.getLogger(CompleteOrderController.class);
     @Inject
     private static OrderService orderService;
     @Inject
@@ -38,7 +38,7 @@ public class CompleteOrderController extends HttpServlet {
             orderService.completeOrder(items, user);
             bucketService.deleteByEntity(bucket);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_msg", e.getMessage());
             req.getRequestDispatcher("/WEB-INF/views/errorDB.jsp").forward(req, resp);
         }

@@ -23,7 +23,7 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class AuthorizationFilter implements Filter {
-    private static final Logger logger = Logger.getLogger(AuthorizationFilter.class);
+    private static final Logger LOGGER = Logger.getLogger(AuthorizationFilter.class);
     @Inject
     private static UserService userService;
     private Map<String, Role.RoleName> protectedUrls = new HashMap<>();
@@ -51,7 +51,7 @@ public class AuthorizationFilter implements Filter {
         try {
             user = userService.get(userId);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
         }
 
         if (roleName != null && !verifyRole(user, roleName)) {

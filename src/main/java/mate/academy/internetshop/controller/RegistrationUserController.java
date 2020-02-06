@@ -16,7 +16,7 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class RegistrationUserController extends HttpServlet {
-    private static final Logger logger = Logger.getLogger(RegistrationUserController.class);
+    private static final Logger LOGGER = Logger.getLogger(RegistrationUserController.class);
 
     @Inject
     private static UserService userService;
@@ -40,7 +40,7 @@ public class RegistrationUserController extends HttpServlet {
         try {
             user = userService.create(newUser);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_msg", e.getMessage());
             req.getRequestDispatcher("/WEB-INF/views/errorDB.jsp").forward(req, resp);
         }

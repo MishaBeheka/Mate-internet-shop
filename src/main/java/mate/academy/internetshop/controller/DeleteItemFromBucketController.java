@@ -15,7 +15,7 @@ import mate.academy.internetshop.service.ItemService;
 import org.apache.log4j.Logger;
 
 public class DeleteItemFromBucketController extends HttpServlet {
-    private static final Logger logger = Logger.getLogger(DeleteItemFromBucketController.class);
+    private static final Logger LOGGER = Logger.getLogger(DeleteItemFromBucketController.class);
 
     @Inject
     private static BucketService bucketService;
@@ -32,7 +32,7 @@ public class DeleteItemFromBucketController extends HttpServlet {
             Item item = itemService.get(Long.valueOf(itemId));
             bucketService.deleteItem(bucket, item);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_msg", e.getMessage());
             req.getRequestDispatcher("/WEB-INF/views/errorDB.jsp").forward(req, resp);
         }
