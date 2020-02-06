@@ -69,12 +69,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             if (resultSet.next()) {
                 user.setUserId(resultSet.getLong(1));
             }
-            try (PreparedStatement prStatementRole =
-                         connection.prepareStatement(ADD_USER_ROLES)) {
-                prStatementRole.setLong(1, user.getUserId());
-                prStatementRole.setLong(2, 1);
-                prStatementRole.executeUpdate();
-            }
+            setUserRole(user);
         } catch (SQLException e) {
             throw new DataProcessingException("User wasn't created " + e);
         }
@@ -87,15 +82,14 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         Set<Role> roles = new HashSet<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_USER)) {
             ps.setLong(1, id);
-            try (ResultSet resultSet = ps.executeQuery()) {
-                while (resultSet.next()) {
-                    generateUser(resultSet, user);
-                    Role role = Role.of(resultSet.getString("role_name"));
-                    roles.add(role);
-                }
-                user.setRoles(roles);
-                return Optional.of(user);
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                generateUser(resultSet, user);
+                Role role = Role.of(resultSet.getString("role_name"));
+                roles.add(role);
             }
+            user.setRoles(roles);
+            return Optional.of(user);
         } catch (SQLException e) {
             throw new DataProcessingException("Can't find user with id " + id + e);
         }
@@ -151,37 +145,27 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public Optional<User> findByLogin(String login) throws DataProcessingException {
-        User user = new User();
-        Set<Role> roles = new HashSet<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_LOGIN)) {
-            preparedStatement.setString(1, login);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    generateUser(resultSet, user);
-                    Role role = Role.of(resultSet.getString("role_name"));
-                    roles.add(role);
-                }
-                user.setRoles(roles);
-                return Optional.of(user);
-            }
-        } catch (SQLException e) {
-            throw new DataProcessingException("Can't find user with login " + login + e);
-        }
+        return findUserBySpecialParam(login, FIND_BY_LOGIN);
     }
 
     @Override
     public Optional<User> findByToken(String token) throws DataProcessingException {
+        return findUserBySpecialParam(token, FIND_BY_TOKEN);
+    }
+
+    private Optional<User> findUserBySpecialParam(String searchParam, String query)
+            throws DataProcessingException {
         User user = new User();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_TOKEN)) {
-            preparedStatement.setString(1, token);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    generateUser(resultSet, user);
-                }
-                return Optional.of(user);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, searchParam);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                generateUser(resultSet, user);
             }
+            return Optional.of(user);
         } catch (SQLException e) {
-            throw new DataProcessingException("Can't find user with token " + token + e);
+            throw new DataProcessingException("Can't find user with search param "
+                    + searchParam + e);
         }
     }
 
@@ -205,5 +189,14 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         user.setToken(resultSet.getString("token"));
         user.setSalt(resultSet.getBytes("salt"));
         return user;
+    }
+
+    private void setUserRole(User user) throws SQLException {
+        try (PreparedStatement prStatementRole =
+                     connection.prepareStatement(ADD_USER_ROLES)) {
+            prStatementRole.setLong(1, user.getUserId());
+            prStatementRole.setLong(2, 1);
+            prStatementRole.executeUpdate();
+        }
     }
 }

@@ -19,12 +19,12 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class AuthenticationFilter implements Filter {
-    private static Logger logger = Logger.getLogger(AuthenticationFilter.class);
+    private static final Logger LOGGER = Logger.getLogger(AuthenticationFilter.class);
     @Inject
     private static UserService userService;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
 
     }
 
@@ -41,20 +41,20 @@ public class AuthenticationFilter implements Filter {
         }
         for (Cookie cookie : req.getCookies()) {
             if (cookie.getName().equals("MATE")) {
-                Optional<User> user = null;
+                Optional<User> user = Optional.empty();
                 try {
                     user = userService.findByToken(cookie.getValue());
                 } catch (DataProcessingException e) {
-                    logger.error(e);
+                    LOGGER.error(e);
                 }
                 if (user.isPresent()) {
-                    logger.info("User " + user.get().getLogin() + " was authentication");
+                    LOGGER.info("User " + user.get().getLogin() + " was authentication");
                     chain.doFilter(servletRequest, servletResponse);
                     return;
                 }
             }
         }
-        logger.info("User wasn't was authentication");
+        LOGGER.info("User wasn't was authentication");
         processUnAuthenticated(req, resp);
 
     }

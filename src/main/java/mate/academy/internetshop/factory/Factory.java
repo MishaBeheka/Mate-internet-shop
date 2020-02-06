@@ -22,8 +22,8 @@ import mate.academy.internetshop.service.implementation.OrderServiceImpl;
 import mate.academy.internetshop.service.implementation.UserServiceImpl;
 import org.apache.log4j.Logger;
 
-public class DaoFactory {
-    private static Logger logger = Logger.getLogger(DaoFactory.class);
+public class Factory {
+    private static final Logger LOGGER = Logger.getLogger(Factory.class);
     private static UserDao userDao;
     private static BucketDao bucketDao;
     private static ItemDao itemDao;
@@ -41,7 +41,7 @@ public class DaoFactory {
                     DriverManager.getConnection("jdbc:mysql://localhost:3306/internet_shop?"
                             + "user=root&password=MySQL101101&serverTimezone=UTC");
         } catch (ClassNotFoundException | SQLException e) {
-            logger.error("Can't establish connection to DB", e);
+            LOGGER.error("Can't establish connection to DB", e);
         }
 
     }

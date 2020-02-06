@@ -23,13 +23,13 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class AuthorizationFilter implements Filter {
-    private static Logger logger = Logger.getLogger(AuthorizationFilter.class);
+    private static final Logger LOGGER = Logger.getLogger(AuthorizationFilter.class);
     @Inject
     private static UserService userService;
     private Map<String, Role.RoleName> protectedUrls = new HashMap<>();
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         protectedUrls.put("/servlet/getAllUsers", ADMIN);
         protectedUrls.put("/servlet/addItem", ADMIN);
 
@@ -51,7 +51,7 @@ public class AuthorizationFilter implements Filter {
         try {
             user = userService.get(userId);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
         }
 
         if (roleName != null && !verifyRole(user, roleName)) {
@@ -76,11 +76,6 @@ public class AuthorizationFilter implements Filter {
                                       HttpServletResponse resp, FilterChain chain)
             throws IOException, ServletException {
         chain.doFilter(req, resp);
-    }
-
-    private void processUnAuthenticated(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-        resp.sendRedirect(req.getContextPath() + "/login ");
     }
 
     @Override

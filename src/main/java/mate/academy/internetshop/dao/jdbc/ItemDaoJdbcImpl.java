@@ -16,8 +16,17 @@ import mate.academy.internetshop.model.Item;
 
 @Dao
 public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
+    private static final String CREATE_ITEM =
+            "INSERT INTO internet_shop.items (name, price) VALUES (?, ?)";
+
+    private static final String GET_ITEM_BY_ID =
+            "SELECT * FROM internet_shop.items WHERE item_id = ?";
+
     private static final String UPDATE_ITEM =
             "UPDATE internet_shop.items SET name = ?, price = ? WHERE item_id = ?";
+
+    private static final String DELETE_ITEM_BY_ID =
+            "DELETE FROM internet_shop.items WHERE item_id = ?";
 
     public ItemDaoJdbcImpl(Connection connection) {
         super(connection);
@@ -25,9 +34,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public Item create(Item item) throws DataProcessingException {
-        String query = "INSERT INTO internet_shop.items (name, price) VALUES (?, ?)";
-        try (PreparedStatement pr = connection.prepareStatement(query,
-                Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement pr = connection.prepareStatement(
+                CREATE_ITEM, Statement.RETURN_GENERATED_KEYS)) {
             pr.setString(1, item.getName());
             pr.setDouble(2, item.getPrice());
             pr.executeUpdate();
@@ -43,9 +51,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public Optional<Item> get(Long id) throws DataProcessingException {
-        String query = "SELECT * FROM internet_shop.items WHERE item_id = ?";
         Item item = new Item();
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+        try (PreparedStatement ps = connection.prepareStatement(GET_ITEM_BY_ID)) {
             ps.setLong(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
                 while (resultSet.next()) {
@@ -74,8 +81,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public boolean deleteById(Long id) throws DataProcessingException {
-        String query = "DELETE FROM internet_shop.items WHERE item_id = ?";
-        try (PreparedStatement pr = connection.prepareStatement(query)) {
+        try (PreparedStatement pr = connection.prepareStatement(DELETE_ITEM_BY_ID)) {
             pr.setLong(1, id);
             pr.executeUpdate();
             return true;

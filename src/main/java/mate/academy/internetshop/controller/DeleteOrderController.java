@@ -8,16 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.lib.Inject;
-import mate.academy.internetshop.service.ItemService;
 import mate.academy.internetshop.service.OrderService;
 import org.apache.log4j.Logger;
 
 public class DeleteOrderController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(DeleteOrderController.class);
+    private static final Logger LOGGER = Logger.getLogger(DeleteOrderController.class);
     @Inject
     private static OrderService orderService;
-    @Inject
-    private static ItemService itemService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -26,7 +23,7 @@ public class DeleteOrderController extends HttpServlet {
         try {
             orderService.deleteById(Long.valueOf(orderId));
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_msg", e.getMessage());
             req.getRequestDispatcher("/WEB-INF/views/errorDB.jsp").forward(req, resp);
         }

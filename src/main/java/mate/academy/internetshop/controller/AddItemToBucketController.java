@@ -12,30 +12,26 @@ import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.ItemService;
-import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class AddItemToBucketController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(AddItemToBucketController.class);
+    private static final Logger LOGGER = Logger.getLogger(AddItemToBucketController.class);
     @Inject
     private static BucketService bucketService;
     @Inject
     private static ItemService itemService;
-    @Inject
-    private static UserService userService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         Long userId = (Long) req.getSession(true).getAttribute("userId");
-        Bucket bucket = null;
         try {
-            bucket = bucketService.getByUserId(userId);
+            Bucket bucket = bucketService.getByUserId(userId);
             String itemId = req.getParameter("item_id");
             Item item = itemService.get(Long.valueOf(itemId));
             bucketService.addItem(bucket, item);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_msg", e.getMessage());
             req.getRequestDispatcher("/WEB-INF/views/errorDB.jsp").forward(req, resp);
         }

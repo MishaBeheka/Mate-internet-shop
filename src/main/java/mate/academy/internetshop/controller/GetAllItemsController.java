@@ -15,7 +15,7 @@ import mate.academy.internetshop.service.ItemService;
 import org.apache.log4j.Logger;
 
 public class GetAllItemsController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(GetAllItemsController.class);
+    private static final Logger LOGGER = Logger.getLogger(GetAllItemsController.class);
 
     @Inject
     private static ItemService itemService;
@@ -27,7 +27,7 @@ public class GetAllItemsController extends HttpServlet {
         try {
             items.addAll(itemService.getAllItems());
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_msg", e.getMessage());
             req.getRequestDispatcher("/WEB-INF/views/errorDB.jsp").forward(req, resp);
         }
