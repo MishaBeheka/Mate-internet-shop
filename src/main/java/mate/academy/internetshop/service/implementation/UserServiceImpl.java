@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
-
 import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.exceptions.AuthenticationException;
 import mate.academy.internetshop.exceptions.DataProcessingException;

@@ -9,7 +9,9 @@ public class Order {
     private Long userId;
     private List<Item> items;
 
-    public Order() {}
+    public Order() {
+
+    }
 
     public Order(Long userId, List<Item> items) {
         this.userId = userId;
