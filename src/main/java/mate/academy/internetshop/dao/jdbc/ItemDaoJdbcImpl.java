@@ -83,8 +83,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     public boolean deleteById(Long id) throws DataProcessingException {
         try (PreparedStatement pr = connection.prepareStatement(DELETE_ITEM_BY_ID)) {
             pr.setLong(1, id);
-            pr.executeUpdate();
-            return true;
+            return pr.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DataProcessingException("Item with id " + id + " wasn't deleted " + e);
         }
@@ -114,9 +113,9 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     }
 
     private Item generateItem(ResultSet resultSet, Item item) throws SQLException {
-        item.setItemId(resultSet.getLong("item_id"));
-        item.setName(resultSet.getString("name"));
-        item.setPrice(resultSet.getDouble("price"));
+        item.setItemId(resultSet.getLong(1));
+        item.setName(resultSet.getString(2));
+        item.setPrice(resultSet.getDouble(3));
         return item;
     }
 }
