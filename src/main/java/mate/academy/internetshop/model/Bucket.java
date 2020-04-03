@@ -8,7 +8,9 @@ public class Bucket {
     private List<Item> items;
     private Long userId;
 
-    public Bucket(){}
+    public Bucket(){
+
+    }
 
     public Bucket(List<Item> items, Long userId) {
         this.items = items;
